@@ -1,9 +1,9 @@
-import mysql2 from "mysql2";
+import mysql from "mysql";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const DB = mysql2.createConnection({
+const connection = mysql.createConnection({
   port: process.env.DB_PORT,
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
@@ -11,12 +11,13 @@ const DB = mysql2.createConnection({
   database: process.env.DB_NAME,
 });
 
-DB.connect((err) => {
+const port = process.env.DB_PORT;
+connection.connect((err) => {
   if (!err) {
-    console.log("Connected");
+    console.log(`mySQL Database Connected on port ${port}`);
   } else {
     console.log(err);
   }
 });
 
-export default DB;
+export default connection;
