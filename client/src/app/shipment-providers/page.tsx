@@ -98,10 +98,9 @@ const shipmentData = [
     location: "San Jose, CA",
     estimatedDelivery: "March 14, 2024",
   },
-  // Add more shipment data...
 ];
 
-const itemsPerPage = 5;
+const itemsPerPage = 7;
 
 export default function ShipmentTrackingPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -133,11 +132,15 @@ export default function ShipmentTrackingPage() {
   return (
     <div>
       <Navbar />
-      <div className="flex px-5 flex-col min-h-[100dvh] justify-center items-center">
-        <div className="flex w-full max-w-6xl justify-center items-center py-10">
+
+      <div className="flex px-5 flex-col min-h-[100dvh] items-center">
+        <h1 className="mt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
+          Track your stuffs
+        </h1>
+        <div className="flex w-full max-w-6xl  items-center pb-10">
           <Input
             placeholder="Enter Tracking Number, Product Name, or Location"
-            className="max-w-2xl"
+            className="max-w-lg"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
