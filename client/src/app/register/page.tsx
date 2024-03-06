@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
 const Login = () => {
   return (
     <div className="grid lg:grid-cols-2">
@@ -11,19 +12,14 @@ const Login = () => {
       </div>
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="text-center text-2xl font-semibold leading-9 tracking-tight text-gray-900">
             Sign up your account
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" action="#" method="POST">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
+              <Label>Email address</Label>
               <div className="mt-2">
                 <Input
                   id="email"
@@ -37,12 +33,7 @@ const Login = () => {
 
             <div>
               <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Password
-                </label>
+                <Label>Password</Label>
               </div>
               <div className="mt-2">
                 <Input
