@@ -109,3 +109,52 @@ export function loginSupplier(req, res) {
     res.status(500).json({ message: "Error logging in" });
   }
 }
+
+// Function to retrieve supplier information based on token
+export function supplierInfo(req, callback) {
+  if (!callback) {
+    throw new Error("Callback function is required");
+  }
+
+  // Extract token from authorization header
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return callback(new Error("Missing token"), null);
+  }
+
+  try {
+    // Verify the token using JWT
+    const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
+    const email = decoded.email; // Assuming email is present in the decoded token
+
+    // Prepare SQL query to find shipper by email
+    const query = `
+      SELECT *
+      FROM supplier
+      WHERE email = ?
+      LIMIT 1
+    `;
+
+    // Execute the query using the connection and handle results
+    connection.query(query, [email], (error, results) => {
+      if (error) {
+        return callback(error, null);
+      }
+
+      if (results.length === 0) {
+        return callback(null, null); // User not found
+      }
+
+      const user = results[0];
+
+      // Remove sensitive information before returning the user object
+      delete user.password; // Example: Remove password field
+      delete user.email_verification_token; // Example: Remove email verification token (if applicable)
+
+      callback(null, user);
+    });
+  } catch (error) {
+    callback(error, null);
+  }
+}
