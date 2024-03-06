@@ -141,7 +141,7 @@ export default function ShipmentTrackingPage() {
       <Navbar />
       <div className="flex px-5 pb-20 flex-col min-h-[100dvh] items-center">
         <h1 className="mt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
-          Track your stuffs
+          Track your Shipments
         </h1>
         <div className="flex w-full max-w-6xl  items-center pb-10">
           <Input

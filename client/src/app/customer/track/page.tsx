@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../customers/Navbar";
+import Navbar from "../Navbar";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 
@@ -9,7 +9,7 @@ const Tracking = () => {
       <Navbar />
       <div className="max-w-6xl pb-20 min-h-screen">
         <h1 className="mt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
-          Track your stuffs
+          Track your Orders
         </h1>
         {/* this below one is one card */}
         <div className="flex flex-col gap-10">
