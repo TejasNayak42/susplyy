@@ -126,7 +126,7 @@ export default function ShipmentTrackingPage() {
     setCurrentPage(currentPage - 1);
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
       handleSearch();
     }
@@ -139,8 +139,7 @@ export default function ShipmentTrackingPage() {
   return (
     <div>
       <Navbar />
-
-      <div className="flex px-5 flex-col min-h-[100dvh] items-center">
+      <div className="flex px-5 pb-20 flex-col min-h-[100dvh] items-center">
         <h1 className="mt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
           Track your stuffs
         </h1>
