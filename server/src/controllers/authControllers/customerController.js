@@ -1,12 +1,8 @@
-import express from "express";
-import connection from "../../database.js";
+import connection from "../../../database.js";
 import Jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const router = express.Router();
-export { router as userRouter };
-
-router.post("/register", (req, res) => {
+export function registerCustomer(req, res) {
   try {
     const { name, phone, email, password, status, role } = req.body;
 
@@ -19,9 +15,9 @@ router.post("/register", (req, res) => {
 
       // Use prepared statements to prevent SQL injection vulnerabilities
       const query = `
-        INSERT INTO user (name, phone, email, password, status, role)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `;
+          INSERT INTO user (name, phone, email, password, status, role)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `;
 
       // Execute the query using the connection object
       connection.query(
@@ -41,15 +37,15 @@ router.post("/register", (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Error registering user" });
   }
-});
+}
 
-router.post("/login", (req, res) => {
+export function loginCustomer(req, res) {
   try {
     const { email, password } = req.body;
 
     const query = `
-        SELECT * FROM user WHERE email = ? LIMIT 1
-      `;
+          SELECT * FROM user WHERE email = ? LIMIT 1
+        `;
 
     connection.query(query, [email], (error, results) => {
       if (error) {
@@ -94,4 +90,4 @@ router.post("/login", (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Error logging in" });
   }
-});
+}
