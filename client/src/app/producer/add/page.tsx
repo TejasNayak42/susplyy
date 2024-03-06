@@ -15,10 +15,10 @@ export default function Example() {
   };
 
   return (
-    <div className="pb-20">
+    <div className="px-5 min-h-[100dvh] pb-20">
       <Navbar />
       <div className="mx-auto max-w-2xl text-center">
-        <h1 className="mt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
+        <h1 className="pt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
           Add Products
         </h1>
       </div>
