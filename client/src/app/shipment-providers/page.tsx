@@ -105,9 +105,17 @@ const itemsPerPage = 7;
 export default function ShipmentTrackingPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredData, setFilteredData] = useState(shipmentData);
 
   const handleSearch = () => {
-    // Implement search functionality...
+    const filtered = shipmentData.filter(
+      (shipment) =>
+        shipment.trackingNumber.includes(searchQuery) ||
+        shipment.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        shipment.productName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredData(filtered);
+    setCurrentPage(1);
   };
 
   const handleNextPage = () => {
@@ -118,12 +126,11 @@ export default function ShipmentTrackingPage() {
     setCurrentPage(currentPage - 1);
   };
 
-  const filteredData = shipmentData.filter(
-    (shipment) =>
-      shipment.trackingNumber.includes(searchQuery) ||
-      shipment.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shipment.productName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -143,11 +150,13 @@ export default function ShipmentTrackingPage() {
             className="max-w-lg"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <Button className="ml-4" onClick={handleSearch}>
             Search
           </Button>
         </div>
+
         <div className="rounded-md border max-w-6xl w-full">
           <Table>
             <TableHeader>
