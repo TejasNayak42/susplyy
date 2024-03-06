@@ -4,7 +4,17 @@ import bcrypt from "bcrypt";
 
 export function registerSupplier(req, res) {
   try {
-    const { name, phone, email, password, status, role } = req.body;
+    const {
+      supplier_name,
+      city,
+      region,
+      country,
+      postal_code,
+      contact_no,
+      email,
+      password,
+      role,
+    } = req.body;
 
     const saltRounds = 12;
     bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
@@ -15,27 +25,41 @@ export function registerSupplier(req, res) {
 
       // Use prepared statements to prevent SQL injection vulnerabilities
       const query = `
-          INSERT INTO user (name, phone, email, password, status, role)
-          VALUES (?, ?, ?, ?, ?, ?)
+          INSERT INTO supplier (supplier_name, city, region, country, postal_code, contact_no, email, password, role)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
       // Execute the query using the connection object
       connection.query(
         query,
-        [name, phone, email, hashedPassword, status, role],
+        [
+          supplier_name,
+          city,
+          region,
+          country,
+          postal_code,
+          contact_no,
+          email,
+          hashedPassword,
+          role,
+        ],
         (error, results) => {
           if (error) {
             console.error(error);
-            return res.status(500).json({ message: "Error registering user" });
+            return res
+              .status(500)
+              .json({ message: "Error registering supplier" });
           }
 
-          res.status(201).json({ message: "User registered successfully!" });
+          res
+            .status(201)
+            .json({ message: "Supplier registered successfully!" });
         }
       );
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error registering user" });
+    res.status(500).json({ message: "Error registering Supplier" });
   }
 }
 
@@ -44,7 +68,7 @@ export function loginSupplier(req, res) {
     const { email, password } = req.body;
 
     const query = `
-          SELECT * FROM user WHERE email = ? LIMIT 1
+          SELECT * FROM supplier WHERE email = ? LIMIT 1
         `;
 
     connection.query(query, [email], (error, results) => {
@@ -57,8 +81,8 @@ export function loginSupplier(req, res) {
         return res.status(401).json({ message: "Incorrect email or password" });
       }
 
-      const user = results[0];
-      bcrypt.compare(password, user.password, (err, passwordMatch) => {
+      const supplier = results[0];
+      bcrypt.compare(password, supplier.password, (err, passwordMatch) => {
         if (err) {
           console.error(err);
           return res.status(500).json({ message: "Error comparing passwords" });
@@ -70,13 +94,7 @@ export function loginSupplier(req, res) {
             .json({ message: "Incorrect email or password" });
         }
 
-        if (user.status === "false") {
-          return res
-            .status(403)
-            .json({ message: "User is waiting for admin approval" });
-        }
-
-        const response = { email: user.email, role: user.role };
+        const response = { email: supplier.email, role: supplier.role };
         const accessToken = Jwt.sign(response, process.env.ACCESS_TOKEN, {
           expiresIn: "8h",
         });

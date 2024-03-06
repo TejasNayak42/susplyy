@@ -1,3 +1,7 @@
+//***********//
+//This file is just for testing
+//**********//
+
 import express from "express";
 import connection from "../../database.js";
 import Jwt from "jsonwebtoken";
