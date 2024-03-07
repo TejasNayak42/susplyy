@@ -94,7 +94,11 @@ export function loginCustomer(req, res) {
             .json({ message: "Incorrect email or password" });
         }
 
-        const response = { email: customer.email, role: customer.role };
+        const response = {
+          id: customer.customer_id,
+          email: customer.email,
+          role: customer.role,
+        };
         const accessToken = Jwt.sign(response, process.env.ACCESS_TOKEN, {
           expiresIn: "8h",
         });
@@ -126,18 +130,18 @@ export function customerInfo(req, callback) {
   try {
     // Verify the token using JWT
     const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
-    const email = decoded.email; // Assuming email is present in the decoded token
+    const customer_id = decoded.id; // Assuming email is present in the decoded token
 
     // Prepare SQL query to find shipper by email
     const query = `
       SELECT *
       FROM customer
-      WHERE email = ?
+      WHERE customer_id = ?
       LIMIT 1
     `;
 
     // Execute the query using the connection and handle results
-    connection.query(query, [email], (error, results) => {
+    connection.query(query, [customer_id], (error, results) => {
       if (error) {
         return callback(error, null);
       }

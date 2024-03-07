@@ -94,7 +94,11 @@ export function loginSupplier(req, res) {
             .json({ message: "Incorrect email or password" });
         }
 
-        const response = { email: supplier.email, role: supplier.role };
+        const response = {
+          id: supplier.supplier_id,
+          email: supplier.email,
+          role: supplier.role,
+        };
         const accessToken = Jwt.sign(response, process.env.ACCESS_TOKEN, {
           expiresIn: "8h",
         });
@@ -126,18 +130,18 @@ export function supplierInfo(req, callback) {
   try {
     // Verify the token using JWT
     const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
-    const email = decoded.email; // Assuming email is present in the decoded token
+    const supplier_id = decoded.id; // Assuming email is present in the decoded token
 
     // Prepare SQL query to find shipper by email
     const query = `
       SELECT *
       FROM supplier
-      WHERE email = ?
+      WHERE supplier_id = ?
       LIMIT 1
     `;
 
     // Execute the query using the connection and handle results
-    connection.query(query, [email], (error, results) => {
+    connection.query(query, [supplier_id], (error, results) => {
       if (error) {
         return callback(error, null);
       }

@@ -113,7 +113,7 @@ export function loginShippers(req, res) {
 
         // Create response object with shipper information
         const response = {
-          id: shipper.id,
+          id: shipper.shipper_id,
           email: shipper.email,
           role: shipper.role,
         };
@@ -151,18 +151,18 @@ export function shipperInfo(req, callback) {
   try {
     // Verify the token using JWT
     const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
-    const email = decoded.email; // Assuming email is present in the decoded token
+    const shipper_id = decoded.id; // Assuming email is present in the decoded token
 
     // Prepare SQL query to find shipper by email
     const query = `
       SELECT *
       FROM shipper
-      WHERE email = ?
+      WHERE shipper_id = ?
       LIMIT 1
     `;
 
     // Execute the query using the connection and handle results
-    connection.query(query, [email], (error, results) => {
+    connection.query(query, [shipper_id], (error, results) => {
       if (error) {
         return callback(error, null);
       }
