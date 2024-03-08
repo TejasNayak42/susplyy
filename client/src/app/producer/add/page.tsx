@@ -1,20 +1,19 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import Navbar from "../Navbar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import Image from "next/image";
 
 export default function Example() {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const [producerInfo, setProducerInfo] = useState<any>({});
   const [cookies] = useCookies(["token"]);
 
   const handleProductNameChange = (e: any) => {
@@ -29,6 +28,10 @@ export default function Example() {
     setPrice(e.target.value);
   };
 
+  const handleQuantityChange = (e: any) => {
+    setQuantity(e.target.value);
+  };
+
   const handleImageUrlChange = (e: any) => {
     setImageUrl(e.target.value);
   };
@@ -37,11 +40,11 @@ export default function Example() {
     e.preventDefault();
 
     const productData = {
-      supplier_id: 123,
+      supplier_id: "",
       product_name: productName,
       product_description: description,
       product_price: parseFloat(price),
-      quantity: 100,
+      quantity: parseInt(quantity),
       image_url: imageUrl,
     };
 
@@ -59,23 +62,25 @@ export default function Example() {
       );
 
       if (response.ok) {
+        setProductName("");
+        setDescription("");
+        setPrice("");
+        setQuantity("");
+        setImageUrl("");
         console.log("Product added successfully!");
-        // Optionally, you can redirect the user or show a success message
       } else {
         console.error("Failed to add product:", response.statusText);
-        // Optionally, you can handle error cases here
       }
     } catch (error) {
       console.error("Error adding product:", error);
-      // Handle network errors or other unexpected errors here
     }
   };
 
   return (
-    <div className="px-5 min-h-[100dvh] pb-20">
+    <div className="px-5 min-h-[100dvh] py-32">
       <Navbar />
       <div className="mx-auto max-w-2xl text-center">
-        <h1 className="pt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
+        <h1 className="w-full max-w-6xl mb-10 text-2xl font-semibold">
           Add Products
         </h1>
       </div>
@@ -88,6 +93,7 @@ export default function Example() {
                 type="text"
                 name="name"
                 id="name"
+                value={productName}
                 onChange={handleProductNameChange}
               />
             </div>
@@ -99,6 +105,7 @@ export default function Example() {
                 name="description"
                 id="description"
                 rows={4}
+                value={description}
                 onChange={handleDescriptionChange}
               />
             </div>
@@ -107,10 +114,23 @@ export default function Example() {
             <Label>Unit Price</Label>
             <div className="mt-2.5">
               <Input
-                type="text"
+                type="number"
                 name="price"
                 id="price"
+                value={price}
                 onChange={handlePriceChange}
+              />
+            </div>
+          </div>
+          <div className="sm:col-span-2">
+            <Label>Quantity</Label>
+            <div className="mt-2.5">
+              <Input
+                type="number"
+                name="quantity"
+                id="quantity"
+                value={quantity}
+                onChange={handleQuantityChange}
               />
             </div>
           </div>
@@ -121,6 +141,7 @@ export default function Example() {
                 type="text"
                 name="image"
                 id="image"
+                value={imageUrl}
                 onChange={handleImageUrlChange}
               />
               {imageUrl && (
@@ -146,116 +167,3 @@ export default function Example() {
     </div>
   );
 }
-
-// import { useState } from "react";
-// import Navbar from "../Navbar";
-// import { Input } from "@/components/ui/input";
-// import { Textarea } from "@/components/ui/textarea";
-// import { Button } from "@/components/ui/button";
-// import { Label } from "@/components/ui/label";
-// import { useCookies } from "react-cookie";
-
-// export default function AddProduct() {
-//   const [productData, setProductData] = useState({
-//     product_name: "",
-//     product_description: "",
-//     product_price: "",
-//     quantity: "",
-//     image_url: ""
-//   });
-
-//   const [cookies] = useCookies(["token"]);
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setProductData({
-//       ...productData,
-//       [name]: value
-//     });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       const response = await fetch("http://localhost:8080/add-product", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${cookies.token}`
-//         },
-//         body: JSON.stringify({
-//           ...productData,
-//           supplier_id: cookies.supplier_id // Assuming supplier_id is stored in cookies
-//         })
-//       });
-
-//       if (!response.ok) {
-//         throw new Error("Failed to add product");
-//       }
-
-//       alert("Product added successfully!");
-//       // Reset form after successful submission
-//       setProductData({
-//         product_name: "",
-//         product_description: "",
-//         product_price: "",
-//         quantity: "",
-//         image_url: ""
-//       });
-//     } catch (error) {
-//       console.error("Error adding product:", error);
-//       // Handle error appropriately
-//     }
-//   };
-
-//   return (
-//     <div className="px-5 min-h-[100dvh] pb-20">
-//       <Navbar />
-//       <div className="mx-auto max-w-2xl text-center">
-//         <h1 className="pt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
-//           Add Products
-//         </h1>
-//       </div>
-//       <form onSubmit={handleSubmit} className="mx-auto max-w-xl">
-//         <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-//           <div className="sm:col-span-2">
-//             <Label>Product Name</Label>
-//             <div className="mt-2.5">
-//               <Input type="text" name="product_name" id="product_name" value={productData.product_name} onChange={handleInputChange} />
-//             </div>
-//           </div>
-//           <div className="sm:col-span-2">
-//             <Label>Description</Label>
-//             <div className="mt-2.5">
-//               <Textarea name="product_description" id="product_description" rows={4} value={productData.product_description} onChange={handleInputChange} />
-//             </div>
-//           </div>
-//           <div className="sm:col-span-2">
-//             <Label>Unit Price</Label>
-//             <div className="mt-2.5">
-//               <Input type="text" name="product_price" id="product_price" value={productData.product_price} onChange={handleInputChange} />
-//             </div>
-//           </div>
-//           <div className="sm:col-span-2">
-//             <Label>Quantity</Label>
-//             <div className="mt-2.5">
-//               <Input type="text" name="quantity" id="quantity" value={productData.quantity} onChange={handleInputChange} />
-//             </div>
-//           </div>
-//           <div className="sm:col-span-2">
-//             <Label>Image</Label>
-//             <div className="mt-2.5">
-//               <Input type="text" name="image_url" id="image_url" value={productData.image_url} onChange={handleInputChange} />
-//             </div>
-//           </div>
-//         </div>
-//         <div className="mt-10">
-//           <Button type="submit" className="w-full">
-//             Add Product
-//           </Button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
