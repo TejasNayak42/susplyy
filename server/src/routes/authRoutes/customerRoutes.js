@@ -4,6 +4,7 @@ import {
   loginCustomer,
   registerCustomer,
 } from "../../controllers/authControllers/customerController.js";
+import { placeOrder } from "../../controllers/Orders/OrderController.js";
 
 const router = express.Router();
 export { router as customerRouter };
@@ -28,3 +29,5 @@ router.get("/info", (req, res) => {
     res.json(user);
   });
 });
+
+router.post("/placeorder", placeOrder);

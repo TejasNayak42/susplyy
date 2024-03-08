@@ -66,9 +66,22 @@ CREATE TABLE products (
   product_description TEXT,
   product_price DECIMAL(10,2) NOT NULL,
   quantity INT NOT NULL,
-  image_url VARCHAR(4000),  
+  image_url VARCHAR(4000),
+  status VARCHAR(255) DEFAULT 'false',
   FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id)
 );
+
+CREATE TABLE orders (
+  order_id INT PRIMARY KEY AUTO_INCREMENT,
+  customer_id INT NOT NULL, 
+  product_id INT,
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id),  
+  date DATE NOT NULL DEFAULT (CURRENT_DATE),
+  total_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00
+);
+
+
+
 
 
 
