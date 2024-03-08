@@ -1,7 +1,9 @@
-import Hero from "@/components/Main/Hero";
-import Navbar from "@/components/Main/Navbar";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const Hero = dynamic(() => import("@/components/Main/Hero"), { ssr: false });
+const Navbar = dynamic(() => import("@/components/Main/Navbar"), {
+  ssr: false,
+});
 
 export default function Home() {
   return (

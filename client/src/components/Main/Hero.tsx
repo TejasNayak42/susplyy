@@ -1,8 +1,13 @@
 "use client";
 import React from "react";
 import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-// import EncryptButton from "@/components/Scan";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Square {
   id: number;
@@ -11,6 +16,7 @@ interface Square {
 import Link from "next/link";
 import Navbar from "./Navbar";
 import { Button } from "../ui/button";
+import LoginOptions from "../LoginOptions";
 
 const Hero: React.FC = () => {
   const ref = React.useRef(null);
@@ -65,9 +71,17 @@ const Hero: React.FC = () => {
           className="flex flex-wrap"
           variants={FADE_UP_ANIMATION_VARIANTS}
         >
-          <Link href="/login">
-            <Button>Get Started</Button>
-          </Link>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button>Get Started</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="max-w-5xl">
+              <LoginOptions />
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </motion.div>
       </motion.div>
       <div className="lg:grid hidden">

@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { LogOut, Container } from "lucide-react";
-import { useRouter } from "next/router";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { deserialize } from "v8";
-import Image from "next/image";
+
 import Logo from "@/components/Logo";
+import LoginOptions from "../LoginOptions";
+import RegisterOptions from "../RegisterOptions";
+
 const Navbar = () => {
   return (
     <div className="fixed backdrop-blur-md top-0 p-5 w-full flex justify-center left-0 z-50 bg-white">
@@ -17,12 +25,28 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex gap-3">
-          <Link href="/register">
-            <Button variant={"ghost"}>Sign Up</Button>
-          </Link>
-          <Link href="/login">
-            <Button>Sign In</Button>
-          </Link>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button variant={"ghost"}>Sign Up</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="max-w-5xl">
+              <RegisterOptions />
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button>Sign In</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="max-w-5xl">
+              <LoginOptions />
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </div>
