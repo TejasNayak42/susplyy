@@ -32,7 +32,7 @@ CREATE TABLE supplier(
     region VARCHAR(300),
     country VARCHAR(36),
     postal_code VARCHAR(20),
-    contact_no INT(10),
+    contact_no BIGINT(20),
     email VARCHAR(30),
     password VARCHAR(300),
     role VARCHAR(20),
@@ -46,7 +46,7 @@ CREATE TABLE shipper(
     region VARCHAR(300),
     country VARCHAR(36),
     postal_code VARCHAR(20),
-    contact_no INT(10),
+    contact_no BIGINT(20),
     email VARCHAR(30),
     password VARCHAR(300),
     role VARCHAR(20),
@@ -54,3 +54,7 @@ CREATE TABLE shipper(
 );
 
 INSERT INTO user(name, phone, email, password, status, role) VALUES('Admin', '1111111111', 'admin@gmail.com', '111111', 'true', 'admin');
+
+ALTER TABLE customer MODIFY COLUMN contact_no BIGINT(20);
+ALTER TABLE supplier MODIFY COLUMN contact_no BIGINT(20);
+ALTER TABLE shipper MODIFY COLUMN contact_no BIGINT(20);
