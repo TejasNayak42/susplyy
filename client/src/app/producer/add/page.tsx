@@ -53,7 +53,7 @@ export default function Example() {
               />
               {imageUrl && (
                 <div className="mt-10">
-                  <Image
+                  <img
                     width={500}
                     height={500}
                     src={imageUrl}
