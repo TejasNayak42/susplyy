@@ -1,23 +1,176 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
-const Login = () => {
+import Navbar from "@/components/Main/Navbar";
+
+const Register = () => {
+  const [formData, setFormData] = useState({
+    shipper_name: "",
+    city: "",
+    region: "",
+    country: "",
+    postal_code: "",
+    contact_no: "",
+    email: "",
+    password: "",
+    role: "shipper",
+  });
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    fetch("http://localhost:8080/shipper/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        setFormData({
+          shipper_name: "",
+          city: "",
+          region: "",
+          country: "",
+          postal_code: "",
+          contact_no: "",
+          email: "",
+          password: "",
+          role: "shipper",
+        });
+
+        // Redirect to login page after successful registration
+        window.location.href = "/shipment-provider/login";
+      })
+      .catch((error) => {
+        console.error("There was an error registering the user:", error);
+        // Handle error appropriately (show error message, etc.)
+      });
+  };
+
+  const handleChange = (event: any) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   return (
-    <div className="grid lg:grid-cols-2">
-      <div className="lg:flex hidden w-full justify-center items-center">
-        <Image src="/register.svg" alt="login" width={500} height={500}></Image>
+    <div className="grid lg:grid-cols-2 max-w-6xl mx-auto">
+      <Navbar />
+      <div className="lg:flex hidden">
+        <Image
+          className="flex fixed ml-5 min-h-[100dvh]"
+          src="/register.svg"
+          alt="login"
+          width={500}
+          height={500}
+        ></Image>
       </div>
-      <div className="flex min-h-screen flex-1 flex-col justify-center px-6 lg:px-8">
+      <div className="my-32 px-5">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="text-center text-2xl font-semibold leading-9 tracking-tight text-gray-900">
             Sign up your account
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <Label>Full Name</Label>
+              <div className="mt-2">
+                <Input
+                  id="shipper_name"
+                  name="shipper_name"
+                  type="text"
+                  autoComplete="shipper_name"
+                  required
+                  value={formData.shipper_name}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label>City</Label>
+              <div className="mt-2">
+                <Input
+                  id="city"
+                  name="city"
+                  type="text"
+                  autoComplete="city"
+                  required
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label>Region</Label>
+              <div className="mt-2">
+                <Input
+                  id="region"
+                  name="region"
+                  type="text"
+                  autoComplete="region"
+                  required
+                  value={formData.region}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label>Country</Label>
+              <div className="mt-2">
+                <Input
+                  id="country"
+                  name="country"
+                  type="text"
+                  autoComplete="country"
+                  required
+                  value={formData.country}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label>Postal Code</Label>
+              <div className="mt-2">
+                <Input
+                  id="postal_code"
+                  name="postal_code"
+                  type="text"
+                  autoComplete="postal_code"
+                  required
+                  value={formData.postal_code}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label>Contact Number</Label>
+              <div className="mt-2">
+                <Input
+                  id="contact_no"
+                  name="contact_no"
+                  type="number"
+                  autoComplete="contact_no"
+                  required
+                  value={formData.contact_no}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
             <div>
               <Label>Email address</Label>
               <div className="mt-2">
@@ -27,6 +180,8 @@ const Login = () => {
                   type="email"
                   autoComplete="email"
                   required
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -42,6 +197,8 @@ const Login = () => {
                   type="password"
                   autoComplete="current-password"
                   required
+                  value={formData.password}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -56,7 +213,7 @@ const Login = () => {
           <p className="mt-10 text-center text-sm text-gray-500">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href="/customer/login"
               className="font-semibold leading-6 text-green-500 hover:text-green-600 transition-all duration-200"
             >
               Login
@@ -68,4 +225,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
