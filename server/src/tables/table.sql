@@ -58,3 +58,17 @@ INSERT INTO user(name, phone, email, password, status, role) VALUES('Admin', '11
 ALTER TABLE customer MODIFY COLUMN contact_no BIGINT(20);
 ALTER TABLE supplier MODIFY COLUMN contact_no BIGINT(20);
 ALTER TABLE shipper MODIFY COLUMN contact_no BIGINT(20);
+
+CREATE TABLE products (
+  product_id INT PRIMARY KEY AUTO_INCREMENT,
+  supplier_id INT NOT NULL,
+  product_name VARCHAR(255) NOT NULL,
+  product_description TEXT,
+  product_price DECIMAL(10,2) NOT NULL,
+  quantity INT NOT NULL,
+  image_url VARCHAR(4000),  
+  FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id)
+);
+
+
+
