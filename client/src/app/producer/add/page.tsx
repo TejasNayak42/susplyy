@@ -150,8 +150,8 @@ export default function Example() {
                     width={500}
                     height={500}
                     src={imageUrl}
-                    alt="Preview"
-                    className="max-w-80 aspect-video mx-auto"
+                    alt="Product Preview"
+                    className="max-w-80 aspect-video object-cover mx-auto"
                   />
                 </div>
               )}
