@@ -17,7 +17,10 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex gap-5">
-          <Link href="/customer/track">
+          <Link href="/customer/orders">
+            <Button>Your Orders</Button>
+          </Link>
+          <Link href="/customer/track-orders">
             <Button>Track Orders</Button>
           </Link>
           <Link href="/">
