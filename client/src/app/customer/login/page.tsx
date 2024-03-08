@@ -54,7 +54,7 @@ const Login = () => {
           <p className="mt-10 text-center text-sm text-gray-500">
             Do not have an account?{" "}
             <Link
-              href="/register"
+              href="/customer/register"
               className="font-semibold leading-6 text-green-500 hover:text-green-600 transition-all duration-200"
             >
               Register

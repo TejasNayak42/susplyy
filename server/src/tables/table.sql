@@ -10,18 +10,19 @@ CREATE TABLE user(
 );
 
 CREATE TABLE customer(
-    customer_id INT primary key AUTO_INCREMENT,
+    customer_id INT PRIMARY KEY AUTO_INCREMENT,
     customer_name VARCHAR(100),
     city VARCHAR(20),
     region VARCHAR(300),
     country VARCHAR(36),
     postal_code VARCHAR(20),
-    contact_no INT(10),
+    contact_no BIGINT(20),
     email VARCHAR(30),
     password VARCHAR(300),
     role VARCHAR(20),
     UNIQUE(email)
 );
+
 
 
 CREATE TABLE supplier(

@@ -29,7 +29,6 @@ const Hero: React.FC = () => {
     <section className="w-full min-h-screen px-5 py-12 grid lg:grid-cols-2 items-center gap-8 max-w-6xl mx-auto">
       <motion.div
         initial="hidden"
-        className="max-w-2xl"
         ref={ref}
         animate={isInView ? "show" : "hidden"}
         viewport={{ once: true }}
