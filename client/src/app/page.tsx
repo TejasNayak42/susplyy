@@ -12,8 +12,8 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
-      {/* <Features />
-      <Footer /> */}
+      <Features />
+      <Footer />
     </main>
   );
 }
