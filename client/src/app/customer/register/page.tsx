@@ -34,6 +34,19 @@ const Register = () => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+
+        setFormData({
+          customer_name: "",
+          city: "",
+          region: "",
+          country: "",
+          postal_code: "",
+          contact_no: "",
+          email: "",
+          password: "",
+          role: "customer",
+        });
+
         // Redirect to login page after successful registration
         window.location.href = "/customer/login";
       })
@@ -51,16 +64,16 @@ const Register = () => {
   return (
     <div className="grid lg:grid-cols-2 max-w-6xl mx-auto">
       <Navbar />
-      <div>
+      <div className="lg:flex hidden">
         <Image
-          className="fixed min-h-[100dvh]"
+          className="flex fixed ml-5 min-h-[100dvh]"
           src="/register.svg"
           alt="login"
           width={500}
           height={500}
         ></Image>
       </div>
-      <div className="my-40">
+      <div className="my-32 px-5">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="text-center text-2xl font-semibold leading-9 tracking-tight text-gray-900">
             Sign up your account
