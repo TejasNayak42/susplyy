@@ -48,12 +48,6 @@ const Hero: React.FC = () => {
         }}
       >
         <Navbar />
-        {/* <motion.h1
-          className="block mb-4 text-lg font-bold text-primary"
-          variants={FADE_DOWN_ANIMATION_VARIANTS}
-        >
-          Quick-y
-        </motion.h1> */}
         <motion.h1
           className="text-4xl font-bold tracking-tight sm:text-5xl bg-gradient-to-r from-green-500 to-green-400 text-transparent bg-clip-text pb-5"
           variants={FADE_DOWN_ANIMATION_VARIANTS}

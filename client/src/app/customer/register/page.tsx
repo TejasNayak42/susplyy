@@ -67,7 +67,7 @@ const Register = () => {
       <div className="lg:flex hidden">
         <Image
           className="flex fixed ml-5 min-h-[100dvh]"
-          src="/register.svg"
+          src="/assets/customer/customer3.svg"
           alt="login"
           width={500}
           height={500}

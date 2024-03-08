@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const stats = [
@@ -26,9 +26,9 @@ const stats = [
   },
 ];
 
-export default function LoginOptions() {
+export default function Features() {
   return (
-    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl mb-48 px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
         {stats.map((stat) => (
           <div
@@ -48,9 +48,6 @@ export default function LoginOptions() {
             <div className="text-base leading-7 text-gray-600">
               {stat.description}
             </div>
-            <Link href={stat.link}>
-              <Button className="mt-5">Continue</Button>
-            </Link>
           </div>
         ))}
       </div>

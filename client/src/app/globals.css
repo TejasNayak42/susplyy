@@ -35,3 +35,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  /* border-radius: 10px; */
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #21c45d;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1ba14c;
+}

@@ -58,7 +58,7 @@ const Login = () => {
       <div className="lg:flex hidden">
         <Image
           className="flex fixed ml-5 min-h-[100dvh]"
-          src="/customer1.svg"
+          src="/assets/customer/customer1.svg"
           alt="login"
           width={500}
           height={500}

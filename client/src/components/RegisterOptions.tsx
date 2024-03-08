@@ -5,21 +5,21 @@ import Link from "next/link";
 const stats = [
   {
     id: 1,
-    img: "/customer1.svg",
+    img: "/assets/customer/customer2.svg",
     name: "Customer",
     description: "Order Products and Track Shipments Easily.",
     link: "/customer/register",
   },
   {
     id: 2,
-    img: "/register.svg",
+    img: "/assets/producer/producer1.svg",
     name: "Producer",
     description: "Add Products and Manage Inventory Seamlessly.",
     link: "/producer/register",
   },
   {
     id: 3,
-    img: "/cargo.svg",
+    img: "/assets/shipment-provider/shipment2.svg",
     name: "Shipment Provider",
     description: "Deliver Products Sustainably with Eco-Friendly Practices.",
     link: "/shipment-provider/register",

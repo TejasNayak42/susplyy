@@ -67,7 +67,7 @@ const Register = () => {
       <div className="lg:flex hidden">
         <Image
           className="flex fixed ml-5 min-h-[100dvh]"
-          src="/register.svg"
+          src="/assets/producer/producer2.svg"
           alt="login"
           width={500}
           height={500}
@@ -213,7 +213,7 @@ const Register = () => {
           <p className="mt-10 text-center text-sm text-gray-500">
             Already have an account?{" "}
             <Link
-              href="/customer/login"
+              href="/producer/login"
               className="font-semibold leading-6 text-green-500 hover:text-green-600 transition-all duration-200"
             >
               Login
