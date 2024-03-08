@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addProduct,
   loginSupplier,
   registerSupplier,
   supplierInfo,
@@ -28,3 +29,4 @@ router.get("/info", (req, res) => {
     res.json(user);
   });
 });
+router.post("/addProducts", addProduct);
