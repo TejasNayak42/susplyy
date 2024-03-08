@@ -9,7 +9,6 @@ import {
   AlertDialogFooter,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import Image from "next/image";
 
 interface Product {
   product_name: string;
@@ -111,7 +110,6 @@ export default function Producer() {
                 </div>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Close</AlertDialogCancel>
-                  {/* <AlertDialogAction>Place Order</AlertDialogAction> */}
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

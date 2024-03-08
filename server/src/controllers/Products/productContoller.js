@@ -3,7 +3,7 @@ import connection from "../../../database.js";
 export function getProducts(req, res) {
   try {
     // Execute the SQL query
-    const query = `SELECT product_name, product_description, product_price, quantity, image_url, status FROM products`;
+    const query = `SELECT product_id, product_name, product_description, product_price, quantity, image_url, status FROM products`;
 
     connection.query(query, (err, results) => {
       if (err) {

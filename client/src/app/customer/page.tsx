@@ -9,9 +9,14 @@ import {
   AlertDialogFooter,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import Image from "next/image";
+import { useCookies } from "react-cookie";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import { Minus, Plus } from "lucide-react";
 
 interface Product {
+  product_id: number;
   product_name: string;
   product_price: number;
   image_url: string;
@@ -21,6 +26,7 @@ interface Product {
 
 export default function Customer() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [cookies] = useCookies(["token"]);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -38,6 +44,35 @@ export default function Customer() {
     fetchProducts();
   }, []);
 
+  const handlePlaceOrder = async (
+    product_id: number,
+    selectedQuantity: number
+  ) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/customer/placeorder",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          body: JSON.stringify({
+            product_id: product_id,
+            selected_quantity: selectedQuantity,
+          }),
+        }
+      );
+      if (response.ok) {
+        console.log("Order placed successfully!");
+      } else {
+        console.error("Failed to place order:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  };
+
   return (
     <div className="flex px-5 justify-center items-center">
       <Navbar />
@@ -47,7 +82,7 @@ export default function Customer() {
         </h1>
         <div className="mt-6 grid grid-cols-1 gap-x-10 gap-y-20 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <AlertDialog key={product.product_name}>
+            <AlertDialog key={product.product_id}>
               <AlertDialogTrigger>
                 <div className="group relative">
                   <div className="aspect-video w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 transition-all duration-200">
@@ -100,14 +135,76 @@ export default function Customer() {
                         <section>
                           <p className="text-xl">${product.product_price}</p>
                         </section>
-                        <p className="text-sm">Only {product.quantity} left.</p>
+                        {product.quantity > 20 ? (
+                          <p className="text-sm">{product.quantity} In Stock</p>
+                        ) : (
+                          <p className="text-sm text-destructive">
+                            Hurry Up! Only {product.quantity} left
+                          </p>
+                        )}
+                      </div>
+                      <div className="mt-4 flex items-center">
+                        <div className="flex">
+                          <Button
+                            variant={"secondary"}
+                            onClick={() => {
+                              const input = document.getElementById(
+                                `quantity-${product.product_id}`
+                              ) as HTMLInputElement;
+                              if (parseInt(input.value) > 1) {
+                                input.value = (
+                                  parseInt(input.value) - 1
+                                ).toString();
+                              }
+                            }}
+                          >
+                            <Minus className="w-3 h-3" />
+                          </Button>
+                          <Input
+                            type="number"
+                            id={`quantity-${product.product_id}`}
+                            name={`quantity-${product.product_id}`}
+                            min="1"
+                            max={product.quantity}
+                            defaultValue="1"
+                            className="mx-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          />
+                          <Button
+                            variant={"secondary"}
+                            onClick={() => {
+                              const input = document.getElementById(
+                                `quantity-${product.product_id}`
+                              ) as HTMLInputElement;
+                              if (parseInt(input.value) < product.quantity) {
+                                input.value = (
+                                  parseInt(input.value) + 1
+                                ).toString();
+                              }
+                            }}
+                          >
+                            <Plus className="w-3 h-3" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Close</AlertDialogCancel>
-                  {/* <AlertDialogAction>Place Order</AlertDialogAction> */}
+                  <AlertDialogAction
+                    onClick={() => {
+                      const selectedQuantity = parseInt(
+                        (
+                          document.getElementById(
+                            `quantity-${product.product_id}`
+                          ) as HTMLInputElement
+                        ).value
+                      );
+                      handlePlaceOrder(product.product_id, selectedQuantity);
+                    }}
+                  >
+                    Place Order
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
