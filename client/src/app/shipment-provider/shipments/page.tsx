@@ -1,11 +1,8 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import { useCookies } from "react-cookie";
-
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -32,6 +29,9 @@ export default function Shipments() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [cookies] = useCookies(["token"]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [trackingInfo, setTrackingInfo] = useState<{ [key: number]: boolean }>(
+    {}
+  );
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -43,6 +43,7 @@ export default function Shipments() {
 
   useEffect(() => {
     fetchShipments();
+    fetchTrackingInfo();
   }, []);
 
   const fetchShipments = async () => {
@@ -71,7 +72,38 @@ export default function Shipments() {
     }
   };
 
-  // Function to format date in "dd-mm-yyyy" format
+  const fetchTrackingInfo = async () => {
+    try {
+      const token = cookies.token;
+      if (!token) {
+        throw new Error("Token not found in cookies");
+      }
+
+      const res = await fetch("http://localhost:8080/tracks/info", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+
+      // Extract shipment_ids from the tracks data
+      const trackedShipments = data.tracks.map(
+        (track: any) => track.shipment_id
+      );
+
+      // Create a tracking map with shipment_ids as keys
+      const trackingMap: { [key: number]: boolean } = {};
+      trackedShipments.forEach((shipmentId: number) => {
+        trackingMap[shipmentId] = true;
+      });
+
+      setTrackingInfo(trackingMap);
+    } catch (error) {
+      console.error("Error fetching tracking info:", error);
+    }
+  };
+
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = String(date.getUTCDate()).padStart(2, "0");
@@ -80,7 +112,32 @@ export default function Shipments() {
     return `${day}-${month}-${year}`;
   };
 
-  // Calculate start and end index for current page
+  const handleTrackButtonClick = async (shipmentId: number) => {
+    try {
+      const token = cookies.token;
+      if (!token) {
+        throw new Error("Token not found in cookies");
+      }
+
+      const res = await fetch("http://localhost:8080/tracks/addtracks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ shipment_id: shipmentId }),
+      });
+
+      if (res.ok) {
+        alert("tracking");
+      } else {
+        throw new Error("Failed to add track");
+      }
+    } catch (error) {
+      console.error("Error adding track:", error);
+    }
+  };
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = shipments.slice(startIndex, endIndex);
@@ -102,6 +159,7 @@ export default function Shipments() {
                   <TableHead>Shipment Status</TableHead>
                   <TableHead>Shipment Date</TableHead>
                   <TableHead>Expected Delivery Date</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -113,7 +171,17 @@ export default function Shipments() {
                     <TableCell>{formatDate(shipment.shipment_date)}</TableCell>
                     <TableCell>{formatDate(shipment.delivery_date)}</TableCell>
                     <TableCell>
-                      <Button>Track</Button>
+                      {trackingInfo[shipment.shipment_id] ? (
+                        <Button disabled>Tracking</Button>
+                      ) : (
+                        <Button
+                          onClick={() =>
+                            handleTrackButtonClick(shipment.shipment_id)
+                          }
+                        >
+                          Track
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

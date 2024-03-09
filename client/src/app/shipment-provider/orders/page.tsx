@@ -203,7 +203,7 @@ export default function Orders() {
                         disabled={isShipmentOrdered(order.order_id)}
                       >
                         {isShipmentOrdered(order.order_id)
-                          ? "Confirmed Order"
+                          ? "Order Confirmed"
                           : "Add Shipment"}
                       </Button>
                     </TableCell>
