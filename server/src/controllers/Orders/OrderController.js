@@ -108,12 +108,12 @@ export async function placeOrder(req, res) {
 
                   // Insert order details
                   const insertOrderQuery = `
-                INSERT INTO orders (customer_id, date, total_amount, product_id)
-                VALUES (?, CURDATE(), ?,?)`;
+                INSERT INTO orders (customer_id, date, total_amount, product_id, quantity)
+                VALUES (?, CURDATE(), ?,?,?)`;
 
                   connection.query(
                     insertOrderQuery,
-                    [customerID, totalAmount, product_id],
+                    [customerID, totalAmount, product_id, selected_quantity],
                     (error) => {
                       if (error) {
                         connection.rollback(() => {

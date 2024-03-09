@@ -4,7 +4,7 @@ import {
   registerShippers,
   shipperInfo,
 } from "../../controllers/authControllers/shippersController.js";
-import { verifyToken } from "../../middlewares/JWTmiddlewares.js";
+import { addShipment } from "../../controllers/Shipments/shipmentController.js";
 
 const router = express.Router();
 export { router as shipperRouter };
@@ -29,3 +29,4 @@ router.get("/info", (req, res) => {
     res.json(user);
   });
 });
+router.post("/addshipment", addShipment);
