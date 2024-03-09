@@ -32,7 +32,7 @@ interface Shipment {
 
 const itemsPerPage = 7;
 
-export default function Shipments() {
+export default function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<{
     [orderId: number]: string;

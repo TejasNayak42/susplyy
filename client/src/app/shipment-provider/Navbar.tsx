@@ -20,6 +20,9 @@ const Navbar = () => {
           <Link href="/shipment-provider/orders">
             <Button>Orders</Button>
           </Link>
+          <Link href="/shipment-provider/shipments">
+            <Button>Shipments</Button>
+          </Link>
           <Link href="/">
             <LogOut className="h-full text-red-500 hover:scale-105 transition-all duration-200" />
           </Link>
