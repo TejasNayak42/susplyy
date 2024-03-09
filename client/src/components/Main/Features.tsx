@@ -29,6 +29,9 @@ const stats = [
 export default function Features() {
   return (
     <div className="mx-auto max-w-6xl mb-48 px-6 lg:px-8">
+      <h1 className="w-full text-center max-w-6xl mb-10 text-3xl font-semibold">
+        Features
+      </h1>
       <div className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
         {stats.map((stat) => (
           <div

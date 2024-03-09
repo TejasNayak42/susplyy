@@ -9,11 +9,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-interface Square {
-  id: number;
-  src: string;
-}
-import Link from "next/link";
 import Navbar from "./Navbar";
 import { Button } from "../ui/button";
 import LoginOptions from "../LoginOptions";
@@ -32,7 +27,7 @@ const Hero: React.FC = () => {
     show: { opacity: 1, y: 0, transition: { type: "spring" } },
   };
   return (
-    <section className="w-full min-h-screen px-5 py-12 grid lg:grid-cols-2 items-center gap-8 max-w-6xl mx-auto">
+    <section className="w-full min-h-[100dvh]  px-5 py-12 justify-center lg:grid flex flex-col-reverse lg:grid-cols-2 items-center gap-8 max-w-6xl mx-auto">
       <motion.div
         initial="hidden"
         ref={ref}
@@ -78,12 +73,8 @@ const Hero: React.FC = () => {
           </AlertDialog>
         </motion.div>
       </motion.div>
-      <div className="lg:grid hidden">
-        <img
-          src="/cargo.svg"
-          alt="cargo"
-          className="md:flex hidden md:w-full"
-        />
+      <div className="w-80 lg:w-auto">
+        <img src="/cargo.svg" alt="cargo" className="md:flex w-80 md:w-full" />
       </div>
     </section>
   );

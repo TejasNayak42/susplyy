@@ -207,3 +207,37 @@ export function getOrdersByCustomerId(req, res) {
     return res.status(500).json({ message: "Error retrieving orders" });
   }
 }
+
+export function getAllOrders(req, res) {
+  try {
+    // Extract role from JWT token
+    const token = req.headers.authorization?.split(" ")[1];
+    const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
+    const role = decoded.role;
+
+    // Check if role is "shipper"
+    if (role !== "shipper") {
+      return res.status(403).json({ message: "Unauthorized access" });
+    }
+
+    // Define the SQL query to directly join the 'orders' and 'products' tables
+    const query = `
+      SELECT o.order_id, o.date, o.total_amount, p.product_name, p.product_price, p.quantity
+      FROM orders o
+      JOIN products p ON o.product_id = p.product_id
+    `;
+
+    connection.query(query, (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error retrieving orders" });
+      }
+
+      // Send successful response with retrieved orders
+      return res.status(200).json({ orders: results });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error retrieving orders" });
+  }
+}
