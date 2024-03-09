@@ -8,6 +8,8 @@ const Logout = () => {
   const handleLogout = () => {
     // Remove token cookie
     removeCookie("token");
+    // Remove local storage
+    localStorage.clear();
     // Redirect to "/"
     window.location.href = "/";
   };

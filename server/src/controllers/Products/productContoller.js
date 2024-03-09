@@ -1,4 +1,5 @@
 import connection from "../../../database.js";
+import Jwt from "jsonwebtoken";
 
 export function getProducts(req, res) {
   try {
