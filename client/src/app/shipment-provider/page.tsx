@@ -1,11 +1,8 @@
 "use client";
-
 import * as React from "react";
-
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -17,102 +14,52 @@ import {
 } from "@/components/ui/table";
 import Navbar from "./Navbar";
 
-const shipmentData = [
-  {
-    id: 1,
-    productName: "Widget",
-    trackingNumber: "1234567890",
-    status: "In Transit",
-    location: "New York, NY",
-    estimatedDelivery: "March 10, 2024",
-  },
-  {
-    id: 2,
-    productName: "Gadget",
-    trackingNumber: "0987654321",
-    status: "Delivered",
-    location: "Los Angeles, CA",
-    estimatedDelivery: "March 5, 2024",
-  },
-  {
-    id: 3,
-    productName: "Machine",
-    trackingNumber: "5432167890",
-    status: "Out for Delivery",
-    location: "Chicago, IL",
-    estimatedDelivery: "March 12, 2024",
-  },
-  {
-    id: 4,
-    productName: "Tool",
-    trackingNumber: "6789012345",
-    status: "Delayed",
-    location: "Houston, TX",
-    estimatedDelivery: "March 15, 2024",
-  },
-  {
-    id: 5,
-    productName: "Equipment",
-    trackingNumber: "2345678901",
-    status: "In Transit",
-    location: "Phoenix, AZ",
-    estimatedDelivery: "March 8, 2024",
-  },
-  {
-    id: 6,
-    productName: "Appliance",
-    trackingNumber: "3456789012",
-    status: "Delivered",
-    location: "Philadelphia, PA",
-    estimatedDelivery: "March 6, 2024",
-  },
-  {
-    id: 7,
-    productName: "Furniture",
-    trackingNumber: "4567890123",
-    status: "In Transit",
-    location: "San Antonio, TX",
-    estimatedDelivery: "March 9, 2024",
-  },
-  {
-    id: 8,
-    productName: "Accessory",
-    trackingNumber: "5678901234",
-    status: "Delivered",
-    location: "San Diego, CA",
-    estimatedDelivery: "March 4, 2024",
-  },
-  {
-    id: 9,
-    productName: "Material",
-    trackingNumber: "7890123456",
-    status: "Out for Delivery",
-    location: "Dallas, TX",
-    estimatedDelivery: "March 11, 2024",
-  },
-  {
-    id: 10,
-    productName: "Supply",
-    trackingNumber: "8901234567",
-    status: "Delayed",
-    location: "San Jose, CA",
-    estimatedDelivery: "March 14, 2024",
-  },
-];
-
-const itemsPerPage = 7;
+interface Track {
+  customer_contact_no: string;
+  customer_postal_code: string;
+  track_id: string;
+  order_id: string;
+  customer_id: string;
+}
 
 export default function ShipmentTrackingPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(shipmentData);
+  const [trackData, setTrackData] = useState<Track[]>([]);
+  const [filteredData, setFilteredData] = useState([] as any[]);
+  const [cookies] = useCookies(["token"]);
+
+  const itemsPerPage = 7;
+
+  useEffect(() => {
+    const token = cookies.token;
+    fetchTrackData(token);
+  }, []);
+
+  const fetchTrackData = async (token: string) => {
+    try {
+      const res = await fetch("http://localhost:8080/tracks/info", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach JWT token to the request header
+        },
+      });
+      const data = await res.json();
+      console.log("Track data:", data);
+      setTrackData(data.tracks);
+      setFilteredData(data.tracks);
+    } catch (error) {
+      console.error("Error fetching track data:", error);
+    }
+  };
 
   const handleSearch = () => {
-    const filtered = shipmentData.filter(
-      (shipment) =>
-        shipment.trackingNumber.includes(searchQuery) ||
-        shipment.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        shipment.productName.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = trackData.filter(
+      (track) =>
+        track.customer_contact_no.includes(searchQuery) ||
+        track.track_id.includes(searchQuery) ||
+        track.order_id.includes(searchQuery) ||
+        track.customer_id.includes(searchQuery) ||
+        track.customer_postal_code.includes(searchQuery)
     );
     setFilteredData(filtered);
     setCurrentPage(1);
@@ -134,7 +81,11 @@ export default function ShipmentTrackingPage() {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = filteredData.slice(startIndex, endIndex);
+  const currentItems = filteredData
+    ? filteredData.slice(startIndex, endIndex)
+    : [];
+
+  const totalCount = filteredData ? filteredData.length : 0;
 
   return (
     <div>
@@ -160,21 +111,27 @@ export default function ShipmentTrackingPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Product Name</TableHead>
-                <TableHead>Tracking Number</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Estimated Delivery</TableHead>
+                <TableHead>Tracking ID</TableHead>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Customer ID</TableHead>
+                <TableHead>Customer Contact</TableHead>
+                <TableHead>Delivery Address</TableHead>
+                <TableHead>Delivery Pin</TableHead>
+                <TableHead>Tracking Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentItems.map((shipment, index) => (
+              {currentItems.map((track, index) => (
                 <TableRow key={index}>
-                  <TableCell>{shipment.productName}</TableCell>
-                  <TableCell>{shipment.trackingNumber}</TableCell>
-                  <TableCell>{shipment.status}</TableCell>
-                  <TableCell>{shipment.location}</TableCell>
-                  <TableCell>{shipment.estimatedDelivery}</TableCell>
+                  <TableCell>{track.track_id}</TableCell>
+                  <TableCell>{track.order_id}</TableCell>
+                  <TableCell>{track.customer_id}</TableCell>
+                  <TableCell>{track.customer_contact_no}</TableCell>
+                  <TableCell>
+                    {`${track.customer_city}, ${track.customer_region}, ${track.customer_country}`}
+                  </TableCell>
+                  <TableCell>{track.customer_postal_code}</TableCell>
+                  <TableCell>{track.tracking_status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -182,8 +139,8 @@ export default function ShipmentTrackingPage() {
         </div>
         <div className="flex items-center justify-between w-full max-w-6xl space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            Showing {startIndex + 1} - {Math.min(endIndex, filteredData.length)}{" "}
-            of {filteredData.length} shipments
+            Showing {startIndex + 1} - {Math.min(endIndex, totalCount)} of{" "}
+            {totalCount} tracks
           </div>
           <div className="space-x-2">
             <Button
@@ -198,7 +155,7 @@ export default function ShipmentTrackingPage() {
               variant="outline"
               size="sm"
               onClick={handleNextPage}
-              disabled={endIndex >= filteredData.length}
+              disabled={endIndex >= totalCount}
             >
               Next
             </Button>
