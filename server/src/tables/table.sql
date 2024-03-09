@@ -91,6 +91,23 @@ CREATE TABLE shipments (
   FOREIGN KEY (shipper_id) REFERENCES shipper(shipper_id)  
 );
 
+CREATE TABLE tracks (
+  track_id INT PRIMARY KEY AUTO_INCREMENT,
+  order_id INT NOT NULL,
+  customer_id INT NOT NULL,
+  shipment_id INT NOT NULL,
+  tracking_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+  tracking_status VARCHAR(255) DEFAULT 'Created',
+  customer_contact_no VARCHAR(20),
+  customer_city VARCHAR(255),
+  customer_region VARCHAR(255),
+  customer_country VARCHAR(255),
+  customer_postal_code VARCHAR(20),
+  FOREIGN KEY (order_id) REFERENCES orders(order_id),
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+  FOREIGN KEY (shipment_id) REFERENCES shipments(shipment_id)
+);
+
 
 
 
