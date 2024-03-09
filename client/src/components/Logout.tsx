@@ -15,11 +15,8 @@ const Logout = () => {
   };
 
   return (
-    <Button variant={"link"}>
-      <LogOut
-        onClick={handleLogout}
-        className="h-full text-red-500 hover:scale-105 transition-all duration-200"
-      />
+    <Button onClick={handleLogout} variant={"destructive"}>
+      Logout
     </Button>
   );
 };

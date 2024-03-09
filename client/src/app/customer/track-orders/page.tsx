@@ -1,28 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 interface Track {
   customer_contact_no: string;
@@ -40,7 +18,6 @@ import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 
 const Tracking = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [trackData, setTrackData] = useState<Track[]>([]);
   const [filteredData, setFilteredData] = useState([] as any[]);
@@ -71,70 +48,6 @@ const Tracking = () => {
     }
   };
 
-  const handleSearch = () => {
-    const filtered = trackData.filter(
-      (track) =>
-        track.customer_contact_no.includes(searchQuery) ||
-        track.track_id.includes(searchQuery) ||
-        track.order_id.includes(searchQuery) ||
-        track.customer_id.includes(searchQuery) ||
-        track.customer_postal_code.includes(searchQuery)
-    );
-    setFilteredData(filtered);
-    setCurrentPage(1);
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  // const handleEditClick = (trackId: string) => {
-  //   setEditTrackId(trackId);
-  // };
-
-  const handleCancelEdit = () => {
-    setEditTrackId("");
-    setNewStatus("");
-  };
-
-  const handleSaveEdit = async () => {
-    const token = cookies.token;
-    try {
-      const response = await fetch("http://localhost:8080/tracks/updatetrack", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          track_id: editTrackId,
-          new_tracking_status: newStatus,
-        }),
-      });
-
-      if (response.ok) {
-        // Update the tracking status in the local state
-        const updatedTracks = trackData.map((track) => {
-          if (track.track_id === editTrackId) {
-            return { ...track, tracking_status: newStatus };
-          }
-          return track;
-        });
-        setTrackData(updatedTracks);
-        setFilteredData(updatedTracks);
-        handleCancelEdit();
-      } else {
-        console.error("Failed to update tracking status:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error updating tracking status:", error);
-    }
-  };
-
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = String(date.getUTCDate()).padStart(2, "0");
@@ -156,35 +69,38 @@ const Tracking = () => {
         <h1 className="mt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
           Track your Orders
         </h1>
-
         <div className="flex flex-col gap-10">
-          {/* this below one is one card */}
           {currentItems.map((track, index) => (
-            <div key={index} className="rounded-lg border w-full p-5">
+            <div
+              key={index}
+              className="rounded-lg hover:shadow-md transition-shadow duration-200 border w-full p-5"
+            >
               <div>
-                <div className="grid grid-cols-4">
-                  <div className="grid gap-5 lg:col-span-3 col-span-4">
-                    <div className="flex gap-5 md:flex-row flex-col">
-                      <div className="w-80 bg-pink-100 aspect-video overflow-hidden rounded-md lg:aspect-none group-hover:opacity-75 transition-all duration-200">
-                        <Image
-                          width={500}
-                          height={500}
-                          src="/cargo.svg"
-                          alt="susply"
-                          className="h-full w-full object-cover object-center"
-                        />
-                      </div>
+                <div className="grid grid-cols-12">
+                  <div className="grid gap-5 md:col-span-4 col-span-5">
+                    <div className="flex w-full gap-5">
                       <div className="gap-1 flex flex-col pr-5">
-                        <h1 className="text-xl font-semibold">Product Name</h1>
-                        <h2 className="text-lg">50$</h2>
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Vel, reiciendis?{" "}
-                        </p>
+                        <h1 className="text-xl font-semibold">
+                          Order #{track.order_id}
+                        </h1>
                       </div>
                     </div>
                   </div>
-                  <div className="flex lg:col-span-1 w-full justify-between col-span-4 lg:flex-col md:flex-row-reverse flex-col mt-5 md:mt-10 lg:mt-0 gap-5">
+                  <div className="flex col-span-1 w-full justify-between flex-col md:mt-10 lg:mt-0 gap-5">
+                    <div className="gap-1 invisible flex flex-col">
+                      <div className="font-semibold">Delivery Address</div>
+                      <p>
+                        {`${track.customer_city}, ${track.customer_region}, ${track.customer_country}`}
+                      </p>
+                      <p>{track.customer_postal_code}</p>
+                    </div>
+                    <div className="gap-1 invisible flex flex-col">
+                      <div className="font-semibold">
+                        Shipment ID #{track.shipment_id}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex absolute w-1/2 right-6 flex-col gap-5">
                     <div className="gap-1 flex flex-col">
                       <div className="font-semibold">Delivery Address</div>
                       <p>
@@ -264,7 +180,15 @@ const Tracking = () => {
                       />
                     </svg>
                   </span>
-                  <span className="text-primary">
+                  <span
+                    className={
+                      ["processing", "shipped", "delivered"].includes(
+                        track.tracking_status
+                      )
+                        ? "text-primary"
+                        : ""
+                    }
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="30"
@@ -283,7 +207,13 @@ const Tracking = () => {
                       />
                     </svg>
                   </span>
-                  <span className="">
+                  <span
+                    className={
+                      ["shipped", "delivered"].includes(track.tracking_status)
+                        ? "text-primary"
+                        : ""
+                    }
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="30"
@@ -296,7 +226,13 @@ const Tracking = () => {
                       />
                     </svg>
                   </span>
-                  <span className="">
+                  <span
+                    className={
+                      track.tracking_status === "delivered"
+                        ? "text-primary"
+                        : ""
+                    }
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="30"
