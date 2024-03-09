@@ -49,7 +49,7 @@ export default function LoginOptions() {
               {stat.description}
             </div>
             <Link href={stat.link}>
-              <Button className="mt-5">Continue</Button>
+              <Button className="mt-5">Sign In</Button>
             </Link>
           </div>
         ))}
