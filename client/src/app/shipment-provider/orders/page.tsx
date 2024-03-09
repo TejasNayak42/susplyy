@@ -204,7 +204,7 @@ export default function Orders() {
                       >
                         {isShipmentOrdered(order.order_id)
                           ? "Order Confirmed"
-                          : "Add Shipment"}
+                          : "Add to Shipment"}
                       </Button>
                     </TableCell>
                   </TableRow>
