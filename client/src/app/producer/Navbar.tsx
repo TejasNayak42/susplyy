@@ -7,6 +7,7 @@ import Link from "next/link";
 import { deserialize } from "v8";
 import Image from "next/image";
 import Logo from "@/components/Logo";
+import Logout from "@/components/Logout";
 const Navbar = () => {
   return (
     <div className="fixed backdrop-blur-md top-0 p-5 w-full flex justify-center left-0 z-50 bg-white">
@@ -20,9 +21,7 @@ const Navbar = () => {
           <Link href="/producer/add">
             <Button>Add Products</Button>
           </Link>
-          <Link href="/">
-            <LogOut className="h-full text-red-500 hover:scale-105 transition-all duration-200" />
-          </Link>
+          <Logout />
         </div>
       </div>
     </div>
