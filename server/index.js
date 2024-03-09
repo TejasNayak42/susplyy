@@ -7,6 +7,7 @@ import { supplierRouter } from "./src/routes/authRoutes/supplierRoutes.js";
 import { shipperRouter } from "./src/routes/authRoutes/shippersRoutes.js";
 import { productRouter } from "./src/routes/susplyRoutes/productRoutes.js";
 import { orderRouter } from "./src/routes/susplyRoutes/orderRoutes.js";
+import { shipmentRouter } from "./src/routes/susplyRoutes/shipmentRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.use("/supplier", supplierRouter);
 app.use("/shipper", shipperRouter);
 app.use("/products", productRouter);
 app.use("/order", orderRouter);
+app.use("/shipments", shipmentRouter);
 
 const port = process.env.PORT;
 app.listen(port, () => {

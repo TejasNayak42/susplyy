@@ -53,11 +53,7 @@ CREATE TABLE shipper(
     UNIQUE(email)
 );
 
-INSERT INTO user(name, phone, email, password, status, role) VALUES('Admin', '1111111111', 'admin@gmail.com', '111111', 'true', 'admin');
 
-ALTER TABLE customer MODIFY COLUMN contact_no BIGINT(20);
-ALTER TABLE supplier MODIFY COLUMN contact_no BIGINT(20);
-ALTER TABLE shipper MODIFY COLUMN contact_no BIGINT(20);
 
 CREATE TABLE products (
   product_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -73,13 +69,36 @@ CREATE TABLE products (
 
 CREATE TABLE orders (
   order_id INT PRIMARY KEY AUTO_INCREMENT,
-  customer_id INT NOT NULL, 
-  product_id INT,
-  FOREIGN KEY (customer_id) REFERENCES customer(customer_id),  
+  customer_id INT NOT NULL,
+  product_id INT NOT NULL,
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
   date DATE NOT NULL DEFAULT (CURRENT_DATE),
-  total_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00
+  total_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  quantity INT NOT NULL 
 );
 
+
+CREATE TABLE shipments (
+  shipment_id INT PRIMARY KEY AUTO_INCREMENT,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  shipper_id INT NOT NULL,  
+  shipment_date DATE NOT NULL,
+  shipment_status VARCHAR(255) DEFAULT 'dispatched',
+  delivery_date DATE NOT NULL,
+  FOREIGN KEY (order_id) REFERENCES orders(order_id),
+  FOREIGN KEY (product_id) REFERENCES products(product_id),
+  FOREIGN KEY (shipper_id) REFERENCES shipper(shipper_id)  
+);
+
+
+
+
+INSERT INTO user(name, phone, email, password, status, role) VALUES('Admin', '1111111111', 'admin@gmail.com', '111111', 'true', 'admin');
+
+ALTER TABLE customer MODIFY COLUMN contact_no BIGINT(20);
+ALTER TABLE supplier MODIFY COLUMN contact_no BIGINT(20);
+ALTER TABLE shipper MODIFY COLUMN contact_no BIGINT(20);
 
 
 

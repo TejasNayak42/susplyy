@@ -1,10 +1,10 @@
 import express from "express";
 import {
-  addProduct,
   loginSupplier,
   registerSupplier,
   supplierInfo,
 } from "../../controllers/authControllers/supplierContoller.js";
+import { addProduct } from "../../controllers/Products/productContoller.js";
 
 const router = express.Router();
 export { router as supplierRouter };
