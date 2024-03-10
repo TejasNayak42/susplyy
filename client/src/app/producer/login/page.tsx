@@ -8,8 +8,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Main/Navbar";
+import { useToast } from "@/components/ui/use-toast";
 
 const Login = () => {
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -23,6 +27,7 @@ const Login = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
 
     fetch("http://localhost:8080/supplier/login", {
       method: "POST",
@@ -41,14 +46,27 @@ const Login = () => {
         // Store token in cookies and local storage
         setCookie("token", data.token, { path: "/" });
         localStorage.setItem("token", data.token);
-        console.log(data.message); // "Login successful!"
+
+        toast({
+          title: "Login Successful",
+          variant: "success",
+        });
+
         setFormData({ email: "", password: "" });
-        // Redirect to customer page
-        window.location.href = "/producer";
+
+        // Redirect to producer page
+        setTimeout(() => {
+          window.location.href = "/producer";
+        }, 1000);
       })
       .catch((error) => {
-        console.error("There was an error logging in:", error);
-        // Handle error appropriately (show error message, etc.)
+        console.error(error);
+        toast({
+          title: "Login Failed",
+          description: "An error occurred. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
       });
   };
 
@@ -76,6 +94,7 @@ const Login = () => {
               <Label>Email address</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="email"
                   name="email"
                   type="email"
@@ -93,6 +112,7 @@ const Login = () => {
               </div>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="password"
                   name="password"
                   type="password"
@@ -104,8 +124,36 @@ const Login = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button disabled={isLoading} type="submit" className="w-full">
               Sign in
+              {isLoading && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  className="ml-2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z"
+                    opacity=".5"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"
+                  >
+                    <animateTransform
+                      attributeName="transform"
+                      dur="1s"
+                      from="0 12 12"
+                      repeatCount="indefinite"
+                      to="360 12 12"
+                      type="rotate"
+                    />
+                  </path>
+                </svg>
+              )}
             </Button>
           </form>
 

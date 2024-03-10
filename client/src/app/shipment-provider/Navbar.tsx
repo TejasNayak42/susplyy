@@ -1,12 +1,12 @@
 import React from "react";
-
-import { useRouter } from "next/router";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { deserialize } from "v8";
-import Image from "next/image";
+
+import { ShipIcon, ShoppingCart } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
 import Logout from "@/components/Logout";
+
 const Navbar = () => {
   return (
     <div className="fixed backdrop-blur-md top-0 p-5 w-full flex justify-center left-0 z-50 bg-white">
@@ -18,10 +18,16 @@ const Navbar = () => {
         </div>
         <div className="flex gap-5">
           <Link href="/shipment-provider/orders">
-            <Button>Orders</Button>
+            <Button className="md:flex hidden">Orders</Button>
+            <Button variant={"link"} className="md:hidden">
+              <ShoppingCart />
+            </Button>
           </Link>
           <Link href="/shipment-provider/shipments">
-            <Button>Shipments</Button>
+            <Button className="md:flex hidden">Shipments</Button>
+            <Button variant={"link"} className="md:hidden">
+              <ShipIcon />
+            </Button>
           </Link>
           <Logout />
         </div>

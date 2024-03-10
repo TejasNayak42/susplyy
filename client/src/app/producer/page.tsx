@@ -41,10 +41,10 @@ export default function Producer() {
     <div className="flex px-5 justify-center items-center">
       <Navbar />
       <div className="max-w-6xl pb-20 min-h-screen">
-        <h1 className="mt-32 w-full max-w-6xl mb-10 text-2xl font-semibold">
+        <h1 className="mt-32 px-5 w-screen max-w-6xl mb-10 text-2xl font-semibold">
           Your Products
         </h1>
-        <div className="mt-6 grid grid-cols-1 gap-x-10 gap-y-20 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 px-5 grid grid-cols-1 gap-x-10 gap-y-20 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
             <AlertDialog key={product.product_name}>
               <AlertDialogTrigger>

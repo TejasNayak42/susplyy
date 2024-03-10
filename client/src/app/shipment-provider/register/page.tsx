@@ -7,8 +7,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Main/Navbar";
+import { useToast } from "@/components/ui/use-toast";
 
 const Register = () => {
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [formData, setFormData] = useState({
     shipper_name: "",
     city: "",
@@ -23,6 +27,8 @@ const Register = () => {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
+    setIsLoading(true);
+
     fetch("http://localhost:8080/shipper/register", {
       method: "POST",
       headers: {
@@ -34,6 +40,12 @@ const Register = () => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+
+        toast({
+          title: "Registration Completed",
+          description: "Redirecting to login page.",
+          variant: "success",
+        });
 
         setFormData({
           shipper_name: "",
@@ -48,11 +60,19 @@ const Register = () => {
         });
 
         // Redirect to login page after successful registration
-        window.location.href = "/shipment-provider/login";
+        setTimeout(() => {
+          window.location.href = "/shipment-provider/login";
+        }, 1000);
       })
       .catch((error) => {
-        console.error("There was an error registering the user:", error);
-        // Handle error appropriately (show error message, etc.)
+        console.error(error);
+        toast({
+          title: "Registration Failed",
+          description:
+            "An error occurred during registration. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
       });
   };
 
@@ -85,6 +105,7 @@ const Register = () => {
               <Label>Full Name</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="shipper_name"
                   name="shipper_name"
                   type="text"
@@ -100,6 +121,7 @@ const Register = () => {
               <Label>City</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="city"
                   name="city"
                   type="text"
@@ -115,6 +137,7 @@ const Register = () => {
               <Label>Region</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="region"
                   name="region"
                   type="text"
@@ -130,6 +153,7 @@ const Register = () => {
               <Label>Country</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="country"
                   name="country"
                   type="text"
@@ -145,6 +169,7 @@ const Register = () => {
               <Label>Postal Code</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="postal_code"
                   name="postal_code"
                   type="text"
@@ -160,6 +185,7 @@ const Register = () => {
               <Label>Contact Number</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="contact_no"
                   name="contact_no"
                   type="number"
@@ -175,6 +201,7 @@ const Register = () => {
               <Label>Email address</Label>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="email"
                   name="email"
                   type="email"
@@ -192,6 +219,7 @@ const Register = () => {
               </div>
               <div className="mt-2">
                 <Input
+                  disabled={isLoading}
                   id="password"
                   name="password"
                   type="password"
@@ -204,8 +232,36 @@ const Register = () => {
             </div>
 
             <div>
-              <Button type="submit" className="w-full">
+              <Button disabled={isLoading} type="submit" className="w-full">
                 Sign up
+                {isLoading && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    className="ml-2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z"
+                      opacity=".5"
+                    />
+                    <path
+                      fill="currentColor"
+                      d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        dur="1s"
+                        from="0 12 12"
+                        repeatCount="indefinite"
+                        to="360 12 12"
+                        type="rotate"
+                      />
+                    </path>
+                  </svg>
+                )}
               </Button>
             </div>
           </form>
