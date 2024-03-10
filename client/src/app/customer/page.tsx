@@ -13,6 +13,8 @@ import { useCookies } from "react-cookie";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { useToast } from "@/components/ui/use-toast";
+
 import { Minus, Plus } from "lucide-react";
 
 interface Product {
@@ -27,6 +29,7 @@ interface Product {
 export default function Customer() {
   const [products, setProducts] = useState<Product[]>([]);
   const [cookies] = useCookies(["token"]);
+  const { toast } = useToast();
 
   useEffect(() => {
     async function fetchProducts() {
@@ -64,8 +67,17 @@ export default function Customer() {
         }
       );
       if (response.ok) {
-        console.log("Order placed successfully!");
+        toast({
+          title: "Order placed successfully!",
+          variant: "success",
+        });
+        console.log("Order placed!");
       } else {
+        toast({
+          title: "Failed to place order",
+          description: "Please try again",
+          variant: "destructive",
+        });
         console.error("Failed to place order:", response.statusText);
       }
     } catch (error) {
@@ -191,7 +203,7 @@ export default function Customer() {
                 </div>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Close</AlertDialogCancel>
-                  <AlertDialogAction
+                  <Button
                     onClick={() => {
                       const selectedQuantity = parseInt(
                         (
@@ -204,7 +216,7 @@ export default function Customer() {
                     }}
                   >
                     Place Order
-                  </AlertDialogAction>
+                  </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
+import { useToast } from "@/components/ui/use-toast";
+
 export default function Example() {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
@@ -15,6 +17,8 @@ export default function Example() {
   const [imageUrl, setImageUrl] = useState("");
 
   const [cookies] = useCookies(["token"]);
+
+  const { toast } = useToast();
 
   const handleProductNameChange = (e: any) => {
     setProductName(e.target.value);
@@ -62,13 +66,22 @@ export default function Example() {
       );
 
       if (response.ok) {
+        toast({
+          title: "Product added successfully!",
+          variant: "success",
+        });
+        console.log("Product added successfully!");
         setProductName("");
         setDescription("");
         setPrice("");
         setQuantity("");
         setImageUrl("");
-        console.log("Product added successfully!");
       } else {
+        toast({
+          title: "Failed to add product",
+          description: "Please try again",
+          variant: "destructive",
+        });
         console.error("Failed to add product:", response.statusText);
       }
     } catch (error) {

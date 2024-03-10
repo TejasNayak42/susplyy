@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/table";
 import Navbar from "./Navbar";
 
+import { useToast } from "@/components/ui/use-toast";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,10 +44,12 @@ export default function ShipmentTrackingPage() {
   const [filteredData, setFilteredData] = useState([] as any[]);
   const [cookies] = useCookies(["token"]);
 
+  const { toast } = useToast();
+
   const [editTrackId, setEditTrackId] = useState("");
   const [newStatus, setNewStatus] = useState("");
 
-  const itemsPerPage = 7;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const token = cookies.token;
@@ -122,11 +126,25 @@ export default function ShipmentTrackingPage() {
         });
         setTrackData(updatedTracks);
         setFilteredData(updatedTracks);
+        toast({
+          title: "Tracking status updated!",
+          variant: "success",
+        });
         handleCancelEdit();
       } else {
+        toast({
+          title: "Failed to update tracking status",
+          description: "Please try again",
+          variant: "destructive",
+        });
         console.error("Failed to update tracking status:", response.statusText);
       }
     } catch (error) {
+      toast({
+        title: "Error updating tracking status",
+        description: "Please try again later",
+        variant: "destructive",
+      });
       console.error("Error updating tracking status:", error);
     }
   };

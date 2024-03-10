@@ -24,7 +24,7 @@ interface Order {
   quantity: number;
 }
 
-const itemsPerPage = 2;
+const itemsPerPage = 10;
 
 export default function CustomerOrders() {
   const [orders, setOrders] = useState<Order[]>([]);

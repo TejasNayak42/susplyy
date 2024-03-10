@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import { useCookies } from "react-cookie";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
+import { useToast } from "@/components/ui/use-toast";
+
 import {
   Table,
   TableBody,
@@ -32,6 +34,8 @@ export default function Shipments() {
   const [trackingInfo, setTrackingInfo] = useState<{ [key: number]: boolean }>(
     {}
   );
+
+  const { toast } = useToast();
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -129,12 +133,28 @@ export default function Shipments() {
       });
 
       if (res.ok) {
-        alert("tracking");
+        toast({
+          title: "Tracking",
+          variant: "success",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
-        throw new Error("Failed to add track");
+        toast({
+          title: "Failed to track",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        throw new Error("Failed to track");
       }
     } catch (error) {
-      console.error("Error adding track:", error);
+      toast({
+        title: "Some error in tracking",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+      console.error("Error track:", error);
     }
   };
 

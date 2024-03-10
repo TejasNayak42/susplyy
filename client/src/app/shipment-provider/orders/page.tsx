@@ -5,8 +5,8 @@ import Navbar from "../Navbar";
 import { useCookies } from "react-cookie";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -40,8 +40,9 @@ export default function Orders() {
   const [confirmedOrders, setConfirmedOrders] = useState<number[]>([]);
   const [cookies] = useCookies(["token"]);
   const [shipments, setShipments] = useState<Shipment[]>([]);
-
   const [currentPage, setCurrentPage] = useState(1);
+
+  const { toast } = useToast();
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -132,7 +133,14 @@ export default function Orders() {
         }),
       });
       const data = await res.json();
-      console.log("Shipment added successfully:", data);
+      toast({
+        title: "Shipment added successfully!",
+        variant: "success",
+      });
+      console.log("Shipment added successfully:");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       // Fetch and display updated orders after adding shipment
       fetchOrders();
       // Mark the order as confirmed
@@ -143,6 +151,11 @@ export default function Orders() {
       // Clear the selected status after adding shipment
       handleStatusChange(orderId, "");
     } catch (error) {
+      toast({
+        title: "Failed to add shipment",
+        description: "Please try again",
+        variant: "destructive",
+      });
       console.error("Error adding shipment:", error);
     }
   };
