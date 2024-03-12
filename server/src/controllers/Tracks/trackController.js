@@ -68,7 +68,7 @@ WHERE s.shipment_id = ?
           customer_id: customerData.customer_id,
           shipment_id: shipment.shipment_id,
           tracking_date: new Date().toISOString().slice(0, 10), // Current date
-          tracking_status: "Created",
+          tracking_status: "ordered",
           customer_contact_no: customerData.customer_contact_no,
           customer_city: customerData.city,
           customer_region: customerData.region,
