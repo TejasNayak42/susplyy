@@ -31,10 +31,12 @@ export default function Customer() {
   const [cookies] = useCookies(["token"]);
   const { toast } = useToast();
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch("http://localhost:8080/products");
+        const response = await fetch(`${server_url}/products`);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
@@ -52,20 +54,17 @@ export default function Customer() {
     selectedQuantity: number
   ) => {
     try {
-      const response = await fetch(
-        "http://localhost:8080/customer/placeorder",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          body: JSON.stringify({
-            product_id: product_id,
-            selected_quantity: selectedQuantity,
-          }),
-        }
-      );
+      const response = await fetch(`${server_url}/customer/placeorder`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`,
+        },
+        body: JSON.stringify({
+          product_id: product_id,
+          selected_quantity: selectedQuantity,
+        }),
+      });
       if (response.ok) {
         toast({
           title: "Order placed successfully!",

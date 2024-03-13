@@ -25,11 +25,13 @@ const Register = () => {
     role: "customer",
   });
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/customer/register", {
+    fetch(`${server_url}/customer/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

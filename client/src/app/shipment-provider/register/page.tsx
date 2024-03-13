@@ -25,11 +25,13 @@ const Register = () => {
     role: "shipper",
   });
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/shipper/register", {
+    fetch(`${server_url}/shipper/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

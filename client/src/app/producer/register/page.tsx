@@ -13,6 +13,8 @@ const Register = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const [formData, setFormData] = useState({
     supplier_name: "",
     city: "",
@@ -29,7 +31,7 @@ const Register = () => {
     event.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/supplier/register", {
+    fetch(`${server_url}/supplier/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

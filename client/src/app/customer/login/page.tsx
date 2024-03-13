@@ -25,11 +25,13 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/customer/login", {
+    fetch(`${server_url}/customer/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

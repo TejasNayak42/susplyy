@@ -39,10 +39,12 @@ export default function CustomerOrders() {
     setCurrentPage(currentPage - 1);
   };
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await fetch("http://localhost:8080/order/", {
+        const response = await fetch(`${server_url}/order/`, {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
           },

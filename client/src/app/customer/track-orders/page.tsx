@@ -33,9 +33,11 @@ const Tracking = () => {
     fetchTrackData(token);
   }, []);
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const fetchTrackData = async (token: string) => {
     try {
-      const res = await fetch("http://localhost:8080/tracks/info", {
+      const res = await fetch(`${server_url}/tracks/info`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

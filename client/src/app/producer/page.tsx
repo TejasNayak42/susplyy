@@ -21,10 +21,12 @@ interface Product {
 export default function Producer() {
   const [products, setProducts] = useState<Product[]>([]);
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch("http://localhost:8080/products");
+        const response = await fetch(`${server_url}/products`);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }

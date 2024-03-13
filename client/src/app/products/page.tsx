@@ -11,8 +11,6 @@ import {
 import { useCookies } from "react-cookie";
 import { Button } from "@/components/ui/button";
 
-import { useToast } from "@/components/ui/use-toast";
-
 import Link from "next/link";
 
 interface Product {
@@ -27,12 +25,13 @@ interface Product {
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [cookies] = useCookies(["token"]);
-  const { toast } = useToast();
+
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch("http://localhost:8080/products");
+        const response = await fetch(`${server_url}/products`);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
@@ -44,44 +43,6 @@ export default function Products() {
     }
     fetchProducts();
   }, []);
-
-  const handlePlaceOrder = async (
-    product_id: number,
-    selectedQuantity: number
-  ) => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/customer/placeorder",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          body: JSON.stringify({
-            product_id: product_id,
-            selected_quantity: selectedQuantity,
-          }),
-        }
-      );
-      if (response.ok) {
-        toast({
-          title: "Order placed successfully!",
-          variant: "success",
-        });
-        console.log("Order placed!");
-      } else {
-        toast({
-          title: "Failed to place order",
-          description: "Please try again",
-          variant: "destructive",
-        });
-        console.error("Failed to place order:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error placing order:", error);
-    }
-  };
 
   return (
     <div className="flex px-5 justify-center items-center">

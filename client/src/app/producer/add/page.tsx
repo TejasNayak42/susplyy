@@ -20,6 +20,8 @@ export default function Example() {
 
   const { toast } = useToast();
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const handleProductNameChange = (e: any) => {
     setProductName(e.target.value);
   };
@@ -53,17 +55,14 @@ export default function Example() {
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/supplier/addProducts",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          body: JSON.stringify(productData),
-        }
-      );
+      const response = await fetch(`${server_url}/supplier/addProducts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`,
+        },
+        body: JSON.stringify(productData),
+      });
 
       if (response.ok) {
         toast({

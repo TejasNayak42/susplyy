@@ -35,6 +35,8 @@ export default function Shipments() {
     {}
   );
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const { toast } = useToast();
 
   const handleNextPage = () => {
@@ -57,7 +59,7 @@ export default function Shipments() {
         throw new Error("Token not found in cookies");
       }
 
-      const res = await fetch("http://localhost:8080/shipments", {
+      const res = await fetch(`${server_url}/shipments`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -83,7 +85,7 @@ export default function Shipments() {
         throw new Error("Token not found in cookies");
       }
 
-      const res = await fetch("http://localhost:8080/tracks/info", {
+      const res = await fetch(`${server_url}/tracks/info`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -123,7 +125,7 @@ export default function Shipments() {
         throw new Error("Token not found in cookies");
       }
 
-      const res = await fetch("http://localhost:8080/tracks/addtracks", {
+      const res = await fetch(`${server_url}/tracks/addtracks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

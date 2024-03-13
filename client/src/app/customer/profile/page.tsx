@@ -6,10 +6,12 @@ const CustomerInfo = () => {
   const [customerInfo, setCustomerInfo] = useState<any>({});
   const [cookies] = useCookies(["token"]);
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   useEffect(() => {
     const fetchCustomerInfo = async () => {
       try {
-        const response = await fetch("http://localhost:8080/customer/info", {
+        const response = await fetch(`${server_url}/customer/info`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${cookies.token}`,

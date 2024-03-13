@@ -14,6 +14,8 @@ const Login = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -29,7 +31,7 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/shipper/login", {
+    fetch(`${server_url}/shipper/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

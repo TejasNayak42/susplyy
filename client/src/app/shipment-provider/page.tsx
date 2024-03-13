@@ -41,6 +41,8 @@ export default function ShipmentTrackingPage() {
 
   const itemsPerPage = 5;
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   useEffect(() => {
     const token = cookies.token;
     fetchTrackData(token);
@@ -48,7 +50,7 @@ export default function ShipmentTrackingPage() {
 
   const fetchTrackData = async (token: string) => {
     try {
-      const res = await fetch("http://localhost:8080/tracks/info", {
+      const res = await fetch(`${server_url}/tracks/info`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +92,7 @@ export default function ShipmentTrackingPage() {
   const handleStatusChange = async (trackId: string, newStatus: string) => {
     const token = cookies.token;
     try {
-      const response = await fetch("http://localhost:8080/tracks/updatetrack", {
+      const response = await fetch(`${server_url}/tracks/updatetrack`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -116,54 +118,6 @@ export default function ShipmentTrackingPage() {
           title: "Tracking status updated!",
           variant: "success",
         });
-      } else {
-        toast({
-          title: "Failed to update tracking status",
-          description: "Please try again",
-          variant: "destructive",
-        });
-        console.error("Failed to update tracking status:", response.statusText);
-      }
-    } catch (error) {
-      toast({
-        title: "Error updating tracking status",
-        description: "Please try again later",
-        variant: "destructive",
-      });
-      console.error("Error updating tracking status:", error);
-    }
-  };
-
-  const handleSaveEdit = async () => {
-    const token = cookies.token;
-    try {
-      const response = await fetch("http://localhost:8080/tracks/updatetrack", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          track_id: editTrackId,
-          new_tracking_status: newStatus,
-        }),
-      });
-
-      if (response.ok) {
-        // Update the tracking status in the local state
-        const updatedTracks = trackData.map((track) => {
-          if (track.track_id === editTrackId) {
-            return { ...track, tracking_status: newStatus };
-          }
-          return track;
-        });
-        setTrackData(updatedTracks);
-        setFilteredData(updatedTracks);
-        toast({
-          title: "Tracking status updated!",
-          variant: "success",
-        });
-        handleCancelEdit();
       } else {
         toast({
           title: "Failed to update tracking status",

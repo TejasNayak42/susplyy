@@ -6,10 +6,12 @@ const ProducerInfo = () => {
   const [producerInfo, setProducerInfo] = useState<any>({});
   const [cookies] = useCookies(["token"]);
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   useEffect(() => {
     const fetchProducerInfo = async () => {
       try {
-        const response = await fetch("http://localhost:8080/supplier/info", {
+        const response = await fetch(`${server_url}/supplier/info`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${cookies.token}`,

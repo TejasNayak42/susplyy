@@ -42,6 +42,8 @@ export default function Orders() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const server_url = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const { toast } = useToast();
 
   const handleNextPage = () => {
@@ -64,7 +66,7 @@ export default function Orders() {
         throw new Error("Token not found in cookies");
       }
 
-      const res = await fetch("http://localhost:8080/order/all", {
+      const res = await fetch(`${server_url}/order/all`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -99,7 +101,7 @@ export default function Orders() {
         throw new Error("Token not found in cookies");
       }
 
-      const res = await fetch("http://localhost:8080/shipments", {
+      const res = await fetch(`${server_url}/shipments`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -121,7 +123,7 @@ export default function Orders() {
 
       const selectedStatus = "ordered"; // Set status as "ordered"
 
-      const res = await fetch("http://localhost:8080/shipper/addshipment", {
+      const res = await fetch(`${server_url}/shipper/addshipment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
