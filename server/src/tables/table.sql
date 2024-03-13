@@ -81,7 +81,7 @@ CREATE TABLE tracks (
   customer_id INT NOT NULL,
   shipment_id INT NOT NULL,
   tracking_date DATE NOT NULL DEFAULT (CURRENT_DATE),
-  tracking_status VARCHAR(255) DEFAULT 'Created',
+  tracking_status VARCHAR(255) DEFAULT 'ordered',
   customer_contact_no VARCHAR(20),
   customer_city VARCHAR(255),
   customer_region VARCHAR(255),
