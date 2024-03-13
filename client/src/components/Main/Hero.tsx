@@ -12,6 +12,8 @@ import {
 import Navbar from "./Navbar";
 import { Button } from "../ui/button";
 import LoginOptions from "../LoginOptions";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const Hero: React.FC = () => {
   const ref = React.useRef(null);
@@ -57,7 +59,7 @@ const Hero: React.FC = () => {
         </motion.h1>
 
         <motion.div
-          className="flex flex-wrap"
+          className="flex flex-wrap gap-3"
           variants={FADE_UP_ANIMATION_VARIANTS}
         >
           <AlertDialog>
@@ -71,6 +73,12 @@ const Hero: React.FC = () => {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+          <Link href="/products">
+            <Button variant={"ghost"} className="flex gap-1">
+              <div>View Products</div>
+              <ArrowRight className="w-4" />
+            </Button>
+          </Link>
         </motion.div>
       </motion.div>
       <div className="w-80 lg:w-auto">
