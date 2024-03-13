@@ -97,6 +97,53 @@ export default function ShipmentTrackingPage() {
     setNewStatus("");
   };
 
+  const handleStatusChange = async (trackId: string, newStatus: string) => {
+    const token = cookies.token;
+    try {
+      const response = await fetch("http://localhost:8080/tracks/updatetrack", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          track_id: trackId,
+          new_tracking_status: newStatus,
+        }),
+      });
+
+      if (response.ok) {
+        // Update the tracking status in the local state
+        const updatedTracks = trackData.map((track) => {
+          if (track.track_id === trackId) {
+            return { ...track, tracking_status: newStatus };
+          }
+          return track;
+        });
+        setTrackData(updatedTracks);
+        setFilteredData(updatedTracks);
+        toast({
+          title: "Tracking status updated!",
+          variant: "success",
+        });
+      } else {
+        toast({
+          title: "Failed to update tracking status",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        console.error("Failed to update tracking status:", response.statusText);
+      }
+    } catch (error) {
+      toast({
+        title: "Error updating tracking status",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+      console.error("Error updating tracking status:", error);
+    }
+  };
+
   const handleSaveEdit = async () => {
     const token = cookies.token;
     try {
@@ -217,10 +264,26 @@ export default function ShipmentTrackingPage() {
                           </AlertDialogTitle>
                         </AlertDialogHeader>
                         <AlertDialogDescription>
-                          <Input
+                          {/* <Input
                             value={newStatus}
                             onChange={(e) => setNewStatus(e.target.value)}
-                          />
+                          /> */}
+                          <TableCell>
+                            <select
+                              value={track.tracking_status}
+                              onChange={(e) =>
+                                handleStatusChange(
+                                  track.track_id,
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="ordered">Ordered</option>
+                              <option value="processing">Processing</option>
+                              <option value="shipped">Shipped</option>
+                              <option value="delivered">Delivered</option>
+                            </select>
+                          </TableCell>
                         </AlertDialogDescription>
                         <AlertDialogFooter>
                           <AlertDialogCancel>
