@@ -92,10 +92,6 @@ export default function ShipmentTrackingPage() {
     setCurrentPage(currentPage - 1);
   };
 
-  // const handleEditClick = (trackId: string) => {
-  //   setEditTrackId(trackId);
-  // };
-
   const handleCancelEdit = () => {
     setEditTrackId("");
     setNewStatus("");
@@ -206,28 +202,13 @@ export default function ShipmentTrackingPage() {
                     {`${track.customer_city}, ${track.customer_region}, ${track.customer_country}`}
                   </TableCell>
                   <TableCell>{track.customer_postal_code}</TableCell>
-                  <TableCell>
-                    {/* {editTrackId === track.track_id ? (
-                      <>
-                        <Input
-                          value={newStatus}
-                          onChange={(e) => setNewStatus(e.target.value)}
-                        />
-                        <Button onClick={handleSaveEdit}>Save</Button>
-                        <Button onClick={handleCancelEdit}>Cancel</Button>
-                      </>
-                    ) : ( */}
-                    {track.tracking_status}
-                    {/* )} */}
-                  </TableCell>
+                  <TableCell>{track.tracking_status}</TableCell>
                   <TableCell>
                     <AlertDialog>
                       <AlertDialogTrigger>
-                        {/* {editTrackId !== track.track_id && ( */}
                         <Button onClick={() => setEditTrackId(track.track_id)}>
                           Edit
                         </Button>
-                        {/* )} */}
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
