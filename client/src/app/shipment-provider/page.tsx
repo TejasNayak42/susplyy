@@ -12,21 +12,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import Navbar from "./Navbar";
 
 import { useToast } from "@/components/ui/use-toast";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 
 interface Track {
   customer_contact_no: string;
@@ -235,7 +225,7 @@ export default function ShipmentTrackingPage() {
                 <TableHead>Delivery Address</TableHead>
                 <TableHead>Delivery Pin</TableHead>
                 <TableHead>Tracking Status</TableHead>
-                <TableHead>Action</TableHead>
+                {/* <TableHead>Action</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -249,59 +239,22 @@ export default function ShipmentTrackingPage() {
                     {`${track.customer_city}, ${track.customer_region}, ${track.customer_country}`}
                   </TableCell>
                   <TableCell>{track.customer_postal_code}</TableCell>
-                  <TableCell>{track.tracking_status}</TableCell>
+                  {/* <TableCell>{track.tracking_status}</TableCell> */}
                   <TableCell>
-                    <AlertDialog>
-                      <AlertDialogTrigger>
-                        <Button onClick={() => setEditTrackId(track.track_id)}>
-                          Edit
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Edit Tracking Status
-                          </AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <AlertDialogDescription>
-                          {/* <Input
-                            value={newStatus}
-                            onChange={(e) => setNewStatus(e.target.value)}
-                          /> */}
-                          <TableCell>
-                            <select
-                              value={track.tracking_status}
-                              onChange={(e) =>
-                                handleStatusChange(
-                                  track.track_id,
-                                  e.target.value
-                                )
-                              }
-                            >
-                              <option value="ordered">Ordered</option>
-                              <option value="processing">Processing</option>
-                              <option value="shipped">Shipped</option>
-                              <option value="delivered">Delivered</option>
-                            </select>
-                          </TableCell>
-                        </AlertDialogDescription>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>
-                            <button
-                              className="w-full"
-                              onClick={handleCancelEdit}
-                            >
-                              Cancel
-                            </button>
-                          </AlertDialogCancel>
-                          <AlertDialogAction>
-                            <button className="w-full" onClick={handleSaveEdit}>
-                              Save
-                            </button>
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <div className="relative w-32">
+                      <select
+                        className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 appearance-none"
+                        value={track.tracking_status}
+                        onChange={(e) =>
+                          handleStatusChange(track.track_id, e.target.value)
+                        }
+                      >
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                      </select>
+                      <CaretSortIcon className="h-4 w-4 absolute top-1/2 right-3 transform -translate-y-1/2 pointer-events-none" />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
