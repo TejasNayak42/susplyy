@@ -153,7 +153,7 @@ export default function Products() {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Close</AlertDialogCancel>
                       <Link href="/customer/login">
-                        <Button>Buy</Button>
+                        <Button className="w-full">Buy</Button>
                       </Link>
                     </AlertDialogFooter>
                   </AlertDialogContent>
