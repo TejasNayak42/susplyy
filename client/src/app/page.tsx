@@ -12,7 +12,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Features />
-      <Mockup />
+      {/* <Mockup /> */}
       <FAQ />
       <Footer />
     </main>
