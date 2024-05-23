@@ -27,7 +27,7 @@ export async function addShipment(req, res) {
     // Extract order ID, shipment status (optional) from request body
     const { order_id, shipment_status } = req.body;
 
-    // Input validation (adjust based on your needs)
+    // Input validation
     if (!order_id) {
       return res.status(400).json({ message: "Invalid order data" });
     }
@@ -35,12 +35,12 @@ export async function addShipment(req, res) {
     // Get current date
     const currentDate = new Date().toISOString().slice(0, 10);
 
-    // Calculate estimated delivery date (add 3 days)
+    // Calculate estimated delivery date
     const estimatedDeliveryDate = new Date(currentDate);
     estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 3);
     const deliveryDate = estimatedDeliveryDate.toISOString().slice(0, 10);
 
-    // Prepare insert query with JOIN to orders table
+    // insert query with JOIN to orders table
     const query = `
         INSERT INTO shipments (order_id, shipper_id, shipment_date, delivery_date, shipment_status, product_id)
         SELECT o.order_id, ?, ?, ?, ?, o.product_id
@@ -48,7 +48,7 @@ export async function addShipment(req, res) {
         WHERE o.order_id = ?
       `;
 
-    // Execute query with order ID, shipper ID, dates, status, and using order ID to get product_id
+    // Executing query with order ID, shipper ID, dates, status, and using order ID to get product_id
     connection.query(
       query,
       [shipperID, currentDate, deliveryDate, shipment_status, order_id],
@@ -107,7 +107,7 @@ export async function getShipments(req, res) {
         return res.status(500).json({ message: "Error fetching shipments" });
       }
 
-      // Return shipment details (consider filtering sensitive data if needed)
+      // Return shipment details
       res.status(200).json({ shipments: results });
     });
   } catch (error) {

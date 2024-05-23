@@ -24,7 +24,7 @@ export function getProducts(req, res) {
 // Function to add a new product
 export function addProduct(req, res) {
   try {
-    // Extract product data from request body (excluding supplier_id)
+    // Extracting product data from request body (excluding supplier_id)
     const {
       image_url,
       product_name,
@@ -39,7 +39,7 @@ export function addProduct(req, res) {
       return res.status(401).json({ message: "Unauthorized: Missing token" });
     }
 
-    let decodedSupplierId; // Declare variables to store details
+    let decodedSupplierId;
     let decodedRole;
 
     try {

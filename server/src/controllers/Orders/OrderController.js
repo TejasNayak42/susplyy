@@ -20,19 +20,19 @@ export async function placeOrder(req, res) {
       return res.status(401).json({ message: "Invalid token" });
     }
 
-    // Check if user has customer role (optional)
+    // Check if user has customer role
     if (role !== "customer") {
       return res.status(403).json({ message: "Unauthorized access" });
     }
 
     const { product_id, selected_quantity } = req.body;
 
-    // Input validation (optional, adjust based on your needs)
+    // Input validation
     if (!product_id || selected_quantity <= 0) {
       return res.status(400).json({ message: "Invalid order data" });
     }
 
-    // Start a transaction (if supported by your database)
+    // Start a transaction
     connection.beginTransaction((err) => {
       if (err) {
         console.error(err);
@@ -138,7 +138,7 @@ export async function placeOrder(req, res) {
                             } else {
                               const orderID = result[0]["LAST_INSERT_ID()"];
 
-                              // Construct the desired response object with order details
+                              //response object with order details
                               const order = {
                                 order_id: orderID,
                                 customer_id: customerID,
@@ -180,12 +180,12 @@ export async function placeOrder(req, res) {
 
 export function getOrdersByCustomerId(req, res) {
   try {
-    // Extract customer ID from JWT token (replace 'your_secret_key' with your actual secret key)
+    // Extract customer ID from JWT token
     const token = req.headers.authorization?.split(" ")[1];
     const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
     const customerId = decoded.id;
 
-    // Define the SQL query to directly join the 'orders' and 'products' tables
+    //SQL query to directly join the 'orders' and 'products' tables
     const query = `
       SELECT o.order_id, o.date, o.total_amount, p.product_name, p.product_price, p.quantity
       FROM orders o
@@ -220,7 +220,7 @@ export function getAllOrders(req, res) {
       return res.status(403).json({ message: "Unauthorized access" });
     }
 
-    // Define the SQL query to directly join the 'orders' and 'products' tables
+    //SQL query to directly join the 'orders' and 'products' tables
     const query = `
       SELECT o.order_id, o.date, o.total_amount, p.product_name, p.product_price, p.quantity
       FROM orders o

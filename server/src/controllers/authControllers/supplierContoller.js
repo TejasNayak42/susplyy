@@ -23,13 +23,13 @@ export function registerSupplier(req, res) {
         return res.status(500).json({ message: "Error hashing password" });
       }
 
-      // Use prepared statements to prevent SQL injection vulnerabilities
+      //prepared statements to prevent SQL injection vulnerabilities
       const query = `
           INSERT INTO supplier (supplier_name, city, region, country, postal_code, contact_no, email, password, role)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-      // Execute the query using the connection object
+      // Executing the query using the connection object
       connection.query(
         query,
         [
@@ -114,7 +114,7 @@ export function loginSupplier(req, res) {
   }
 }
 
-// Function to retrieve supplier information based on token
+// Function to retrieve supplier information
 export function supplierInfo(req, callback) {
   if (!callback) {
     throw new Error("Callback function is required");
@@ -130,9 +130,9 @@ export function supplierInfo(req, callback) {
   try {
     // Verify the token using JWT
     const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
-    const supplier_id = decoded.id; // Assuming email is present in the decoded token
+    const supplier_id = decoded.id;
 
-    // Prepare SQL query to find shipper by email
+    //SQL query to find shipper by email
     const query = `
       SELECT *
       FROM supplier
@@ -140,7 +140,7 @@ export function supplierInfo(req, callback) {
       LIMIT 1
     `;
 
-    // Execute the query using the connection and handle results
+    // Executing the query using the connection and handle results
     connection.query(query, [supplier_id], (error, results) => {
       if (error) {
         return callback(error, null);

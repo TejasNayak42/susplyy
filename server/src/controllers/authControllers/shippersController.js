@@ -1,6 +1,6 @@
-import connection from "../../../database.js"; // Import database connection
-import Jwt from "jsonwebtoken"; // Import JSON Web Token library
-import bcrypt from "bcrypt"; // Import password hashing library
+import connection from "../../../database.js";
+import Jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 // Function to register a new shipper
 export function registerShippers(req, res) {
@@ -26,13 +26,13 @@ export function registerShippers(req, res) {
         return res.status(500).json({ message: "Error hashing password" });
       }
 
-      // Prepare SQL query to insert new shipper
+      //SQL query to insert new shipper
       const query = `
         INSERT INTO shipper (shipper_name, city, region, country, postal_code, contact_no, email, password, role)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-      // Execute the query using the connection and handle results
+      // Executing the query using the connection and handle results
       connection.query(
         query,
         [
@@ -77,12 +77,12 @@ export function loginShippers(req, res) {
     // Extract email and password from request body
     const { email, password } = req.body;
 
-    // Prepare SQL query to find shipper by email
+    //SQL query to find shipper by email
     const query = `
       SELECT * FROM shipper WHERE email = ? LIMIT 1
     `;
 
-    // Execute the query using the connection and handle results
+    // Executing the query using the connection and handle results
     connection.query(query, [email], (error, results) => {
       if (error) {
         console.error(error); // Log error for debugging
@@ -104,14 +104,14 @@ export function loginShippers(req, res) {
           return res.status(500).json({ message: "Error comparing passwords" });
         }
 
-        // Check if password matches
+        // Checking if password matches
         if (!passwordMatch) {
           return res
             .status(401)
             .json({ message: "Incorrect email or password" });
         }
 
-        // Create response object with shipper information
+        // response object with shipper information
         const response = {
           id: shipper.shipper_id,
           email: shipper.email,
@@ -135,7 +135,7 @@ export function loginShippers(req, res) {
   }
 }
 
-// Function to retrieve shipper information based on token
+// Function to retrieve shipper information
 export function shipperInfo(req, callback) {
   if (!callback) {
     throw new Error("Callback function is required");
@@ -151,9 +151,9 @@ export function shipperInfo(req, callback) {
   try {
     // Verify the token using JWT
     const decoded = Jwt.verify(token, process.env.ACCESS_TOKEN);
-    const shipper_id = decoded.id; // Assuming email is present in the decoded token
+    const shipper_id = decoded.id;
 
-    // Prepare SQL query to find shipper by email
+    //SQL query to find shipper by email
     const query = `
       SELECT *
       FROM shipper
@@ -161,7 +161,7 @@ export function shipperInfo(req, callback) {
       LIMIT 1
     `;
 
-    // Execute the query using the connection and handle results
+    // Executing the query using the connection and handle results
     connection.query(query, [shipper_id], (error, results) => {
       if (error) {
         return callback(error, null);

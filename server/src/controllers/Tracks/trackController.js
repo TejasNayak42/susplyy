@@ -27,7 +27,7 @@ export function populateTracks(req, res) {
   // Extract shipment ID from request body
   const { shipment_id } = req.body;
 
-  // Input validation (adjust based on your needs)
+  // Input validation
   if (!shipment_id) {
     return res.status(400).json({ message: "Invalid shipment data" });
   }
@@ -37,7 +37,7 @@ export function populateTracks(req, res) {
       return res.status(404).json({ message: "Shipment not found" });
     }
 
-    // Prepare query to fetch customer details based on shipment ID
+    // Query to fetch customer details based on shipment ID
     const customerQuery = `
 SELECT c.customer_id, c.contact_no AS customer_contact_no, c.city, c.region, c.country, c.postal_code
 FROM shipments s
@@ -76,7 +76,7 @@ WHERE s.shipment_id = ?
           customer_postal_code: customerData.postal_code,
         };
 
-        // Execute a separate query to insert into tracks table
+        // Executing a separate query to insert into tracks table
         connection.query(
           `
             INSERT INTO tracks (order_id, customer_id, shipment_id, tracking_date, tracking_status, customer_contact_no, customer_city, customer_region, customer_country, customer_postal_code)
@@ -154,7 +154,7 @@ export function updateTrackStatus(req, res) {
   // Extract track ID and new tracking status from request body
   const { track_id, new_tracking_status } = req.body;
 
-  // Input validation (adjust based on your needs)
+  // Input validation
   if (!track_id || !new_tracking_status) {
     return res.status(400).json({ message: "Invalid track data" });
   }
